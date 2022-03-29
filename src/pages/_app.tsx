@@ -1,7 +1,7 @@
 ///////////////////////////////////// login page
 
 // react import
-import React from 'React'
+import React from 'react'
 
 // type 'AppProps" from next/app
 import type { AppProps } from 'next/app'

@@ -1,7 +1,7 @@
 /* eslint @typescript-eslint/no-explicit-any: "off" */
 
 // import react
-import * as React from 'React'
+import * as React from 'react'
 
 // framer-motion integration with styled-components + material.ui
 import { motion } from 'framer-motion'

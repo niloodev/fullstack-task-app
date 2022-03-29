@@ -1,7 +1,7 @@
 ///////////////////////////////////// register page
 
 // react import
-import React from 'React'
+import React from 'react'
 
 // import components from app-components, made by framer-motion, material-ui and styled components.
 import {
