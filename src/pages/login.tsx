@@ -1,4 +1,4 @@
-///////////////////////////////////// register page
+///////////////////////////////////// login page
 
 // react import
 import React from 'React'
@@ -8,6 +8,7 @@ import {
     HundredPercentAlign,
     AuthBox,
     AuthInput,
+    AuthIcon,
     AuthP,
     AuthButton,
 } from '../styles/app-components'
@@ -16,17 +17,17 @@ import {
 import Head from 'next/head'
 
 // page component, type ranks as React.FunctionalComponent (React.FC)
-const Register: React.FC = () => {
+const Login: React.FC = () => {
     return (
         <HundredPercentAlign
-            key="register"
+            key="login"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
         >
             {/* head component, makes easy to search engines to encounter and organize this app's pages */}
             <Head>
-                <title>Sign-in | niloodev</title>
+                <title>Log-in | niloodev</title>
 
                 <meta
                     name="viewport"
@@ -36,17 +37,14 @@ const Register: React.FC = () => {
 
             {/* form box */}
             <AuthBox>
+                {/* auth icon */}
+                <AuthIcon />
+
                 {/* auth title */}
-                <AuthP>SIGN-IN</AuthP>
+                <AuthP>LOG-IN</AuthP>
 
-                {/* auth inputs | user, email and password */}
+                {/* auth inputs | user and password */}
                 <AuthInput label="User" style={{ width: '90%' }} />
-
-                <AuthInput
-                    label="E-mail"
-                    type="email"
-                    style={{ width: '90%' }}
-                />
 
                 <AuthInput
                     label="Password"
@@ -55,18 +53,18 @@ const Register: React.FC = () => {
                 />
 
                 {/* login button */}
-                <AuthButton buttonType="register" />
+                <AuthButton buttonType="login" />
 
-                {/* back button */}
+                {/* register button */}
                 <AuthButton
                     padding="5"
-                    onClick={() => (window.location.href = '/login')}
+                    onClick={() => (window.location.href = '/register')}
                 >
-                    BACK
+                    REGISTER
                 </AuthButton>
             </AuthBox>
         </HundredPercentAlign>
     )
 }
 
-export default Register
+export default Login
