@@ -4,7 +4,7 @@
 import 'styled-components'
 
 // color variables
-import colorsVar from './colors-var'
+import colorsVar from '../styles/colors-var'
 
 // export of type by color variables
 export type Theme = typeof colorsVar

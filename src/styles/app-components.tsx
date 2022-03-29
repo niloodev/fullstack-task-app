@@ -87,7 +87,7 @@ export const AuthButton = (props: any) => {
     `
     return (
         <AuthButton {...props} variant="contained" color="warning">
-            {props.buttonType == 'login' || props.buttonType == 'register' ? (
+            {props.buttontype == 'login' || props.buttontype == 'register' ? (
                 <CheckIcon color="secondary" />
             ) : (
                 <AuthSpan>{props.children}</AuthSpan>

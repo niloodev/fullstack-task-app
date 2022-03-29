@@ -6,6 +6,9 @@ import React from 'React'
 // type 'AppProps" from next/app
 import type { AppProps } from 'next/app'
 
+// import session provider from next-auth
+import { SessionProvider } from 'next-auth/react'
+
 // framer-motion <3 (dinamic animate framework)
 import { AnimatePresence as Animate } from 'framer-motion'
 
@@ -29,9 +32,12 @@ const MUI_colorsVar = createTheme(colorsVar)
 // free to give a touch.
 
 // export MyApp "global" / main component, that includes other pages in <Component {...pageProps} />.
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({
+    Component,
+    pageProps: { session, ...pageProps },
+}: AppProps) {
     return (
-        <>
+        <SessionProvider session={session}>
             <ThemeProvider theme={colorsVar}>
                 <MUI_ThemeProvider theme={MUI_colorsVar}>
                     <Animate exitBeforeEnter>
@@ -40,6 +46,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                     <GlobalStyle />
                 </MUI_ThemeProvider>
             </ThemeProvider>
-        </>
+        </SessionProvider>
     )
 }

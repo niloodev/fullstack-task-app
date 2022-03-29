@@ -55,7 +55,7 @@ const Register: React.FC = () => {
                 />
 
                 {/* login button */}
-                <AuthButton buttonType="register" />
+                <AuthButton buttontype="register" />
 
                 {/* back button */}
                 <AuthButton

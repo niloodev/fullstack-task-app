@@ -53,7 +53,7 @@ const Login: React.FC = () => {
                 />
 
                 {/* login button */}
-                <AuthButton buttonType="login" />
+                <AuthButton buttontype="login" />
 
                 {/* register button */}
                 <AuthButton
