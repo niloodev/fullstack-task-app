@@ -6,9 +6,6 @@ import React from 'react'
 // type 'AppProps" from next/app
 import type { AppProps } from 'next/app'
 
-// import session provider from next-auth
-import { SessionProvider } from 'next-auth/react'
-
 // framer-motion <3 (dinamic animate framework)
 import { AnimatePresence as Animate } from 'framer-motion'
 
@@ -27,6 +24,9 @@ import {
 
 const MUI_colorsVar = createTheme(colorsVar)
 
+// import auth provider
+import { AuthUserProvider } from '../lib/firebase-auth-provider'
+
 // now, they're using the same object for all the theme three distributed across all application - i dont know if this
 // is the best solution of the problem, but its working | if someone want to feedback this with better integrations, feel
 // free to give a touch.
@@ -34,7 +34,7 @@ const MUI_colorsVar = createTheme(colorsVar)
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <SessionProvider session={pageProps.session}>
+        <AuthUserProvider>
             <ThemeProvider theme={colorsVar}>
                 <MUI_ThemeProvider theme={MUI_colorsVar}>
                     <Animate exitBeforeEnter>
@@ -43,6 +43,6 @@ export default function MyApp({ Component, pageProps }: AppProps) {
                     <GlobalStyle />
                 </MUI_ThemeProvider>
             </ThemeProvider>
-        </SessionProvider>
+        </AuthUserProvider>
     )
 }

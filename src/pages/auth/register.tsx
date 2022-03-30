@@ -10,7 +10,7 @@ import {
     AuthInput,
     AuthP,
     AuthButton,
-} from '../styles/app-components'
+} from '../../styles/app-components'
 
 // head from next.js
 import Head from 'next/head'

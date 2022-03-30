@@ -3,18 +3,8 @@
 // react import
 import React from 'react'
 
-// next-auth imports
-import { signIn } from 'next-auth/react'
-
 // import components from app-components, made by framer-motion, material-ui and styled components.
-import {
-    HundredPercentAlign,
-    AuthBox,
-    AuthInput,
-    AuthIcon,
-    AuthP,
-    AuthButton,
-} from '../styles/app-components'
+import { HundredPercentAlign, AuthBox } from '../../styles/app-components'
 
 // head from next.js
 import Head from 'next/head'

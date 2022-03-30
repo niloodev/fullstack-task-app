@@ -3,9 +3,6 @@
 // react import
 import React from 'react'
 
-// next-auth imports
-import { signIn } from 'next-auth/react'
-
 // import components from app-components, made by framer-motion, material-ui and styled components.
 import {
     HundredPercentAlign,
@@ -14,7 +11,7 @@ import {
     AuthIcon,
     AuthP,
     AuthButton,
-} from '../styles/app-components'
+} from '../../styles/app-components'
 
 // head from next.js
 import Head from 'next/head'
@@ -59,13 +56,7 @@ const Login: React.FC = () => {
                 <AuthButton buttontype="login" />
 
                 {/* github login button */}
-                <AuthButton
-                    onClick={() => {
-                        signIn('github')
-                    }}
-                    buttontype="github"
-                    padding="8"
-                />
+                <AuthButton buttontype="github" padding="8" />
 
                 {/* register button */}
                 <AuthButton
