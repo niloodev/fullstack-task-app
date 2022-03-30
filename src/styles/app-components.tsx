@@ -9,6 +9,7 @@ import Styles from 'styled-components'
 
 // some components
 import UserIcon from '@mui/icons-material/AccountCircleRounded'
+import GitHubIcon from '@mui/icons-material/GitHub'
 import TextField from '@mui/material/TextField'
 
 import Button from '@mui/material/Button'
@@ -30,7 +31,7 @@ export const AuthBox = Styles.div`
 
     display: flex; justify-content: center; align-items: center;
     flex-flow: column;
-    gap: 15px;
+    gap: 10px;
     padding: 12px;
 
     background-color: ${props => props.theme.palette.secondary.main};
@@ -89,6 +90,8 @@ export const AuthButton = (props: any) => {
         <AuthButton {...props} variant="contained" color="warning">
             {props.buttontype == 'login' || props.buttontype == 'register' ? (
                 <CheckIcon color="secondary" />
+            ) : props.buttontype == 'github' ? (
+                <GitHubIcon color="secondary" />
             ) : (
                 <AuthSpan>{props.children}</AuthSpan>
             )}

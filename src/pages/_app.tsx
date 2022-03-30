@@ -30,14 +30,11 @@ const MUI_colorsVar = createTheme(colorsVar)
 // now, they're using the same object for all the theme three distributed across all application - i dont know if this
 // is the best solution of the problem, but its working | if someone want to feedback this with better integrations, feel
 // free to give a touch.
-
 // export MyApp "global" / main component, that includes other pages in <Component {...pageProps} />.
-export default function MyApp({
-    Component,
-    pageProps: { session, ...pageProps },
-}: AppProps) {
+
+export default function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <SessionProvider session={session}>
+        <SessionProvider session={pageProps.session}>
             <ThemeProvider theme={colorsVar}>
                 <MUI_ThemeProvider theme={MUI_colorsVar}>
                     <Animate exitBeforeEnter>

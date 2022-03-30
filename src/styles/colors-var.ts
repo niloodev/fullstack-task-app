@@ -4,13 +4,13 @@
 const colors = {
     palette: {
         primary: {
-            main: '#171738',
+            main: '#121212',
         },
         secondary: {
-            main: '#F2F2F2',
+            main: '#EDEDED',
         },
         warning: {
-            main: '#E84855',
+            main: '#ff4d4d',
         },
     },
     typography: {
