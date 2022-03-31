@@ -3,20 +3,21 @@
 // import react
 import * as React from 'react'
 
-// framer-motion integration with styled-components + material.ui
+// framer-motion integration with Styled-components + material.ui
 import { motion } from 'framer-motion'
-import Styles from 'styled-components'
+import Styled from 'styled-components'
 
-// some components
+// some components | icons
 import UserIcon from '@mui/icons-material/AccountCircleRounded'
 import GitHubIcon from '@mui/icons-material/GitHub'
 import TextField from '@mui/material/TextField'
-
-import Button from '@mui/material/Button'
 import CheckIcon from '@mui/icons-material/Check'
 
+// solid components
+import Button from '@mui/material/Button'
+
 // div that centers anything inside it
-export const HundredPercentAlign = Styles(motion.div)`
+export const HundredPercentAlign = Styled(motion.div)`
     position: relative;
     width: 100%; height: 100%;
     
@@ -24,7 +25,7 @@ export const HundredPercentAlign = Styles(motion.div)`
 `
 
 // auth-box its basically the container of the form
-export const AuthBox = Styles.div`
+export const AuthBox = Styled.div`
     position: absolute;
     min-width: 300px;
     min-height: 400px;
@@ -60,12 +61,39 @@ export const AuthBox = Styles.div`
 export const AuthIcon = () => <UserIcon color="warning" fontSize="large" />
 
 // auth-input is the material-ui input with some definitions, made it here because of padronization
-export const AuthInput = (props: any) => (
-    <TextField {...props} variant="outlined" color="warning" />
-)
+const CapsuleDiv = Styled.div`
+    width: 90%;
+    position: relative;
+`
+
+const LabelError = Styled.div`
+    color: ${props => props.theme.palette.error.main};
+    bottom: 3.5px;
+    position: absolute;
+    justify-content: center; align-items: center;
+    font-size: 12px; 
+    width: 100%;
+`
+export const AuthInput = (props: any) => {
+    return (
+        <CapsuleDiv>
+            <TextField
+                {...props}
+                variant="outlined"
+                color="warning"
+                style={{ width: '100%' }}
+            />
+            <LabelError
+                style={{ display: props.logerror != '' ? 'flex' : 'none' }}
+            >
+                {props.errorlog}
+            </LabelError>
+        </CapsuleDiv>
+    )
+}
 
 // paragraph of the forms
-export const AuthP = Styles.h1`
+export const AuthP = Styled.h1`
     color: ${props => props.theme.palette.warning.main};
     font-weight: bold;
     text-align: center;
@@ -75,19 +103,16 @@ export const AuthP = Styles.h1`
     margin: 0; padding: 0;
 `
 
-// customizable button that fits the application design, a good example of material-ui + styled components integration.
-export const AuthButton = (props: any) => {
-    const AuthButton = Styles(Button)`
+// customizable button that fits the application design, a good example of material-ui + Styled components integration.
+const AuthButton_ = Styled(Button)`
         width: 90%;
-        padding-top: ${props.padding ? props.padding : '15'}px !important;
-        padding-bottom: ${props.padding ? props.padding : '15'}px !important;
-    `
-
-    const AuthSpan = Styles.span`
+`
+const AuthSpan = Styled.span`
         color: ${props => props.theme.palette.secondary.main};
-    `
+`
+export const AuthButton = (props: any) => {
     return (
-        <AuthButton {...props} variant="contained" color="warning">
+        <AuthButton_ {...props} variant="contained" color="warning">
             {props.buttontype == 'login' || props.buttontype == 'register' ? (
                 <CheckIcon color="secondary" />
             ) : props.buttontype == 'github' ? (
@@ -95,6 +120,6 @@ export const AuthButton = (props: any) => {
             ) : (
                 <AuthSpan>{props.children}</AuthSpan>
             )}
-        </AuthButton>
+        </AuthButton_>
     )
 }

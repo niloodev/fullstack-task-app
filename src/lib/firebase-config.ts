@@ -1,5 +1,13 @@
 // import initializeApp from firebase
 import { initializeApp, FirebaseApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+
+// import database
+import { getDatabase } from 'firebase/database'
+
+// type import
+import type { Auth } from 'firebase/auth'
+import type { Database } from 'firebase/database'
 
 // sets config
 const FirebaseConfig = {
@@ -13,6 +21,6 @@ const FirebaseConfig = {
 }
 
 // initializeApp on firebase checking if other instance exists
-const initializedApp: FirebaseApp = initializeApp(FirebaseConfig)
-
-export default initializedApp
+export const initializedApp: FirebaseApp = initializeApp(FirebaseConfig)
+export const initializedDatabase: Database = getDatabase(initializedApp)
+export const initializedAuth: Auth = getAuth(initializedApp)

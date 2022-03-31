@@ -2,51 +2,89 @@
 
 // here we will create a hook state, it will be used as tracker of session state
 import { useEffect, useState } from 'react'
-import fireApp from './firebase-config'
 
-import { getAuth } from 'firebase/auth'
-console.log(fireApp)
+// import of firebase-config, instantiated getAuth() and getDatabase() linked to application
+import {
+    initializedAuth as AuthObj,
+    initializedDatabase as DbObj,
+} from './firebase-config'
+
+// some of the auth functions provided by auth module of firebase application
+import {
+    createUserWithEmailAndPassword as createUser,
+    signInWithEmailAndPassword as signInUserEmail,
+    signOut as sOut,
+    setPersistence,
+    browserSessionPersistence,
+} from 'firebase/auth'
+
+// firebase database ref and set's
+import { ref, set } from 'firebase/database'
 
 // declare filterUser interface type
 interface filterUser {
     uid: string
     email: string
-    toDo: []
 }
 
 // filterAuthUser to frontend
 const filterAuthUser = (user: any) => ({
     uid: user.uid,
     email: user.email,
-    toDo: user.toDo,
 })
 
 // export state function
 export default function useFirebaseAuth() {
     // set states
     const [authUser, setAuthUser] = useState<filterUser | null>(null)
-    const [loading, setLoading] = useState(true)
 
     // function that will be called everytime AuthState changes
     const authStateChanged = (authState: any) => {
         if (!authState) {
             setAuthUser(null)
-            setLoading(false)
             return
         }
 
-        setLoading(true)
         var formattedUser = filterAuthUser(authState)
         setAuthUser(formattedUser)
-        setLoading(false)
     }
 
-    // works as a DidComponentMount, and returns a dismount.
+    // clear state
+    const clear = () => {
+        setAuthUser(null)
+    }
+
     useEffect(() => {
-        const unsubscribe =
-            getAuth(fireApp).onAuthStateChanged(authStateChanged)
-        return () => unsubscribe()
+        const del = AuthObj.onAuthStateChanged(authStateChanged)
+        return () => del()
     }, [])
 
-    return { authUser, loading }
+    const signInEmailAndPassword = (email: string, password: string) => {
+        setPersistence(AuthObj, browserSessionPersistence).then(() => {
+            return signInUserEmail(AuthObj, email, password)
+        })
+    }
+
+    const createUserWithEmailAndPassword = (
+        email: string,
+        password: string,
+        user: string
+    ) =>
+        createUser(AuthObj, email, password).then(userCredential => {
+            set(ref(DbObj, 'users/' + userCredential.user.uid), {
+                user: user,
+                toDo: [],
+            })
+        })
+
+    const signOut = () => {
+        sOut(AuthObj).then(() => clear())
+    }
+
+    return {
+        authUser,
+        signInEmailAndPassword,
+        createUserWithEmailAndPassword,
+        signOut,
+    }
 }

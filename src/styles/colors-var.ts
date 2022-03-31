@@ -12,6 +12,9 @@ const colors = {
         warning: {
             main: '#ff4d4d',
         },
+        error: {
+            main: '#e03131',
+        },
     },
     typography: {
         fontFamily: `"Work Sans", sans-serif`,

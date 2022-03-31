@@ -8,9 +8,23 @@ import { createContext, useContext } from 'react'
 import useFirebaseAuth from './use-firebase-auth'
 
 // create AuthUserContext format
+// empty functions are just templates, make typescript consider it in syntax
 const AuthUserContext = createContext({
     authUser: null,
     loading: false,
+    signInEmailAndPassword: (email: string, password: string) => {
+        return { email, password }
+    },
+    createUserWithEmailAndPassword: (
+        email: string,
+        password: string,
+        user: string
+    ) => {
+        return { email, password, user }
+    },
+    signOut: () => {
+        return
+    },
 })
 
 // export custom provider to auth informations.
