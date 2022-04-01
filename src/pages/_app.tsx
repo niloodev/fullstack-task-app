@@ -24,6 +24,10 @@ import {
 
 const MUI_colorsVar = createTheme(colorsVar)
 
+// material-ui variant module called notistack, it makes popups appear in a imperative way, not needing to
+// controlate the state of the component or something like that.
+import { SnackbarProvider } from 'notistack'
+
 // import auth provider
 import { AuthUserProvider } from '../lib/firebase-auth-provider'
 
@@ -34,15 +38,17 @@ import { AuthUserProvider } from '../lib/firebase-auth-provider'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <AuthUserProvider>
-            <ThemeProvider theme={colorsVar}>
-                <MUI_ThemeProvider theme={MUI_colorsVar}>
-                    <Animate exitBeforeEnter>
-                        <Component {...pageProps} />
-                    </Animate>
-                    <GlobalStyle />
-                </MUI_ThemeProvider>
-            </ThemeProvider>
-        </AuthUserProvider>
+        <ThemeProvider theme={colorsVar}>
+            <MUI_ThemeProvider theme={MUI_colorsVar}>
+                <SnackbarProvider preventDuplicate={false} maxSnack={1}>
+                    <AuthUserProvider>
+                        <Animate exitBeforeEnter>
+                            <Component {...pageProps} />
+                        </Animate>
+                    </AuthUserProvider>
+                </SnackbarProvider>
+                <GlobalStyle />
+            </MUI_ThemeProvider>
+        </ThemeProvider>
     )
 }

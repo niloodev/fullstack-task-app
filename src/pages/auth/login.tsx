@@ -8,7 +8,7 @@ import { useAuth } from '../../lib/firebase-auth-provider'
 
 // validate.js to validate inputs and model of validation
 import { validate } from 'validate.js'
-import validateParams from '../../lib/validate-model'
+import validateParams from '../../tools/validate-model'
 
 // import components from app-components, made by framer-motion, material-ui and styled components.
 import {
@@ -17,6 +17,7 @@ import {
     AuthInput,
     AuthIcon,
     AuthButton,
+    AuthSeparator,
 } from '../../styles/app-components'
 
 // head from next.js
@@ -65,6 +66,9 @@ const Login: React.FC = () => {
                 {/* auth icon */}
                 <AuthIcon />
 
+                {/* auth separator */}
+                <AuthSeparator />
+
                 {/* auth inputs | user and password */}
                 <AuthInput
                     label="E-mail"
@@ -97,6 +101,7 @@ const Login: React.FC = () => {
 
                 {/* login button */}
                 <AuthButton
+                    padding="15px"
                     buttontype="login"
                     onClick={() => {
                         const errors = validate(

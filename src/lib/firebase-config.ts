@@ -10,7 +10,7 @@ import type { Auth } from 'firebase/auth'
 import type { Database } from 'firebase/database'
 
 // sets config
-const FirebaseConfig = {
+const firebaseConfig = {
     apiKey: 'AIzaSyBn1UILO8jnQ-MsTIdlzlTgPz-_7lscsqw',
     authDomain: 'niloodev-full-stack-task-app.firebaseapp.com',
     projectId: 'niloodev-full-stack-task-app',
@@ -21,6 +21,6 @@ const FirebaseConfig = {
 }
 
 // initializeApp on firebase checking if other instance exists
-export const initializedApp: FirebaseApp = initializeApp(FirebaseConfig)
+export const initializedApp: FirebaseApp = initializeApp(firebaseConfig)
 export const initializedDatabase: Database = getDatabase(initializedApp)
 export const initializedAuth: Auth = getAuth(initializedApp)

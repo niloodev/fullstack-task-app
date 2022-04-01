@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 
 // validate.js to validate inputs and model of validation
 import { validate } from 'validate.js'
-import validateParams from '../../lib/validate-model'
+import validateParams from '../../tools/validate-model'
 
 // import components from app-components, made by framer-motion, material-ui and styled components.
 import {

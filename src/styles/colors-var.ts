@@ -13,7 +13,7 @@ const colors = {
             main: '#ff4d4d',
         },
         error: {
-            main: '#e03131',
+            main: '#d32f2f',
         },
     },
     typography: {

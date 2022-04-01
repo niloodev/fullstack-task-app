@@ -1,20 +1,21 @@
 /* eslint @typescript-eslint/no-explicit-any: "off" */
 
 // import react
-import * as React from 'react'
+import React from 'react'
 
-// framer-motion integration with Styled-components + material.ui
+// framer-motion integration with styled-components + material.ui
 import { motion } from 'framer-motion'
 import Styled from 'styled-components'
 
 // some components | icons
-import UserIcon from '@mui/icons-material/AccountCircleRounded'
-import GitHubIcon from '@mui/icons-material/GitHub'
-import TextField from '@mui/material/TextField'
-import CheckIcon from '@mui/icons-material/Check'
+import {
+    AccountCircleRounded as UserIcon,
+    GitHub as GitHubIcon,
+    Check as CheckIcon,
+} from '@mui/icons-material'
 
 // solid components
-import Button from '@mui/material/Button'
+import { Button, TextField } from '@mui/material'
 
 // div that centers anything inside it
 export const HundredPercentAlign = Styled(motion.div)`
@@ -58,7 +59,17 @@ export const AuthBox = Styled.div`
 `
 
 // auth-icon is the css settings of the user-icon; used in login and register page
-export const AuthIcon = () => <UserIcon color="warning" fontSize="large" />
+export const AuthIcon = () => (
+    <UserIcon color="warning" style={{ fontSize: '40px' }} />
+)
+
+export const AuthSeparator = Styled.div`
+    width: 90%;
+    height: 2.5px;
+    border-radius: 100%;
+
+    background-color: ${props => props.theme.palette.warning.main};
+`
 
 // auth-input is the material-ui input with some definitions, made it here because of padronization
 const CapsuleDiv = Styled.div`
@@ -68,7 +79,7 @@ const CapsuleDiv = Styled.div`
 
 const LabelError = Styled.div`
     color: ${props => props.theme.palette.error.main};
-    bottom: 3.5px;
+    bottom: 0px;
     position: absolute;
     justify-content: center; align-items: center;
     font-size: 12px; 
@@ -112,7 +123,15 @@ const AuthSpan = Styled.span`
 `
 export const AuthButton = (props: any) => {
     return (
-        <AuthButton_ {...props} variant="contained" color="warning">
+        <AuthButton_
+            {...props}
+            variant="contained"
+            color="warning"
+            style={{
+                paddingTop: props.padding ? props.padding : '5px',
+                paddingBottom: props.padding ? props.padding : '5px',
+            }}
+        >
             {props.buttontype == 'login' || props.buttontype == 'register' ? (
                 <CheckIcon color="secondary" />
             ) : props.buttontype == 'github' ? (

@@ -1,5 +1,4 @@
 /* eslint @typescript-eslint/no-explicit-any: "off" */
-
 import React from 'react'
 import type { PropsWithChildren, ReactNode } from 'react'
 
@@ -11,7 +10,7 @@ import useFirebaseAuth from './use-firebase-auth'
 // empty functions are just templates, make typescript consider it in syntax
 const AuthUserContext = createContext({
     authUser: null,
-    loading: false,
+    authError: '',
     signInEmailAndPassword: (email: string, password: string) => {
         return { email, password }
     },
