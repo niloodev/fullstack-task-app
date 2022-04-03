@@ -29,7 +29,7 @@ const MUI_colorsVar = createTheme(themePalette)
 import { SnackbarProvider } from 'notistack'
 
 // import auth provider
-import { AuthUserProvider } from '../lib/firebase-auth-provider'
+import { AuthUserProvider } from '../lib/firebase-context-hook-provider'
 
 // now, they're using the same object for all the theme three distributed across all application - i dont know if this
 // is the best solution of the problem, but its working | if someone want to feedback this with better integrations, feel

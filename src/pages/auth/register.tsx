@@ -22,7 +22,7 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 // useAuth from firebase-auth-provider
-import { useAuth } from '../../lib/firebase-auth-provider' // to component
+import { useAuth } from '../../lib/firebase-context-hook-provider' // to component
 
 // page component, type ranks as React.FunctionalComponent (React.FC)
 const Register: React.FC = () => {

@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react'
 
 // import auth state
-import { useAuth } from '../../lib/firebase-auth-provider' // to component
+import { useAuth } from '../../lib/firebase-context-hook-provider' // to component
 
 // validate.js to validate inputs and model of validation
 import { validate } from 'validate.js'
@@ -44,10 +44,8 @@ const Login: React.FC = () => {
     const router = useRouter()
     useEffect(() => {
         if (authUser) {
-            console.log('user')
             router.push('/users/dashboard')
         } else {
-            console.log('not user')
             setIsReady(true)
         }
     }, [authUser])
