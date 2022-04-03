@@ -18,7 +18,7 @@ import {
     createUserWithEmailAndPassword as createUser,
     signInWithEmailAndPassword as signInUserEmail,
     signOut as sOut,
-    signInWithRedirect,
+    signInWithPopup,
     setPersistence,
     browserSessionPersistence,
     UserCredential,
@@ -157,7 +157,7 @@ export default function useFirebaseAuth() {
 
     const signInWithGithub = () => {
         setIsLoading(true)
-        signInWithRedirect(AuthObj, GithubProvider)
+        signInWithPopup(AuthObj, GithubProvider)
             .then((userCredential: UserCredential) => {
                 // update user name as displayName from github
                 update(ref(DbObj, 'users/' + userCredential.user.uid), {
