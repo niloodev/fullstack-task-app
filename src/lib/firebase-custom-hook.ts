@@ -44,7 +44,9 @@ const filterAuthUser = (user: any) => ({
 // export state function
 export default function useFirebaseAuth() {
     // set states
-    const [authUser, setAuthUser] = useState<filterUser | null>(null)
+    const [authUser, setAuthUser] = useState<filterUser | null | string>(
+        'waiting'
+    )
     // set loading
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
