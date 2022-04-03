@@ -44,6 +44,12 @@ const filterAuthUser = (user: any) => ({
 // export state function
 export default function useFirebaseAuth() {
     // set states
+    // *authUser have 3 possible states: "waiting" | string is the default state that was not updated by
+    // firebase; null is the updated state of authUser that indicates no one is logged in; and filterUser
+    // is the state that indicates active session.
+    // ** the use of "waiting" was necessary since firebase have a delay to define null, and null cant be
+    // the initial state, or it will redirects wrongly (like redirecting a auth-user like it wasnt logged in.
+
     const [authUser, setAuthUser] = useState<filterUser | null | string>(
         'waiting'
     )
