@@ -4,11 +4,11 @@
 import React, { useEffect, useState } from 'react'
 
 // import auth state
-import { useAuth } from '../../lib/firebase-auth-provider'
+import { useAuth } from '../../lib/firebase-auth-provider' // to component
 
 // validate.js to validate inputs and model of validation
 import { validate } from 'validate.js'
-import validateParams from '../../tools/validate-model'
+import validateParams from '../../tools/validatejs-params'
 
 // import components from app-components, made by framer-motion, material-ui and styled components.
 import {
@@ -18,14 +18,17 @@ import {
     AuthIcon,
     AuthButton,
     AuthSeparator,
-} from '../../styles/app-components'
+} from '../../styles/auth-components'
 
 // head from next.js
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 // page component, type ranks as React.FunctionalComponent (React.FC)
 const Login: React.FC = () => {
+    const [isReady, setIsReady] = useState(false)
+
     // state of input values (controlled component) and errors log.
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
@@ -34,22 +37,23 @@ const Login: React.FC = () => {
     const [emailError, setEmailError] = useState<string | undefined>()
 
     // auth state
-    const { authUser, signInEmailAndPassword } = useAuth()
+    const { authUser, isLoading, signInEmailAndPassword, signInWithGithub } =
+        useAuth()
 
     // check if user is already logged in, if true send it to dashboard
     const router = useRouter()
     useEffect(() => {
         if (authUser) {
             router.push('/users/dashboard')
-        }
+        } else setIsReady(true)
     }, [authUser])
 
-    return (
+    return isReady ? (
         <HundredPercentAlign
-            key="login"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, transform: 'scale(0, 0)' }}
+            animate={{ opacity: 1, transform: 'scale(1, 1)' }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
         >
             {/* head component, makes easy to search engines to encounter and organize this app's pages */}
             <Head>
@@ -72,6 +76,7 @@ const Login: React.FC = () => {
                 {/* auth inputs | user and password */}
                 <AuthInput
                     label="E-mail"
+                    disabled={isLoading}
                     value={email}
                     inputProps={{
                         maxLength: 35,
@@ -87,6 +92,7 @@ const Login: React.FC = () => {
                 <AuthInput
                     label="Password"
                     type="password"
+                    disabled={isLoading}
                     value={password}
                     inputProps={{
                         maxLength: 35,
@@ -102,7 +108,8 @@ const Login: React.FC = () => {
                 {/* login button */}
                 <AuthButton
                     padding="15px"
-                    buttontype="login"
+                    disabled={isLoading}
+                    buttontype={!isLoading ? 'login' : 'loading'}
                     onClick={() => {
                         const errors = validate(
                             {
@@ -133,16 +140,20 @@ const Login: React.FC = () => {
                 />
 
                 {/* github login button */}
-                <AuthButton buttontype="github" />
+                <AuthButton
+                    disabled={isLoading}
+                    buttontype="github"
+                    onClick={signInWithGithub}
+                />
 
                 {/* register button */}
-                <AuthButton
-                    onClick={() => (window.location.href = '/auth/register')}
-                >
-                    REGISTER
-                </AuthButton>
+                <Link passHref href="/auth/register">
+                    <AuthButton disabled={isLoading}>REGISTER</AuthButton>
+                </Link>
             </AuthBox>
         </HundredPercentAlign>
+    ) : (
+        <></>
     )
 }
 

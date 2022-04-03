@@ -4,12 +4,13 @@
 import { useEffect, useState } from 'react'
 
 // notistack definitions hook from notistack-def.ts
-import useNotistack from '../tools/notistack-def'
+import useNotistack from '../tools/notistack-custom-hook'
 
 // import of firebase-config, instantiated getAuth() and getDatabase() linked to application
 import {
     initializedAuth as AuthObj,
     initializedDatabase as DbObj,
+    GithubProvider,
 } from './firebase-config'
 
 // some of the auth functions provided by auth module of firebase application
@@ -17,6 +18,7 @@ import {
     createUserWithEmailAndPassword as createUser,
     signInWithEmailAndPassword as signInUserEmail,
     signOut as sOut,
+    signInWithPopup,
     setPersistence,
     browserSessionPersistence,
 } from 'firebase/auth'
@@ -26,7 +28,6 @@ import firebaseErrors from './firebase-error-translator'
 
 // firebase database ref and set's
 import { ref, set } from 'firebase/database'
-//import type { FirebaseError } from 'firebase/app'
 
 // declare filterUser interface type
 interface filterUser {
@@ -44,9 +45,16 @@ const filterAuthUser = (user: any) => ({
 export default function useFirebaseAuth() {
     // set states
     const [authUser, setAuthUser] = useState<filterUser | null>(null)
+    // set loading
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     // to alert errors
     const { queueSnackbar } = useNotistack()
+
+    // clear state
+    const clear = () => {
+        setAuthUser(null)
+    }
 
     // function that will be called everytime AuthState changes
     const authStateChanged = (authState: any) => {
@@ -59,11 +67,6 @@ export default function useFirebaseAuth() {
         setAuthUser(formattedUser)
     }
 
-    // clear state
-    const clear = () => {
-        setAuthUser(null)
-    }
-
     // dispose event trigger
     useEffect(() => {
         const del = AuthObj.onAuthStateChanged(authStateChanged)
@@ -74,11 +77,15 @@ export default function useFirebaseAuth() {
     const signInEmailAndPassword = (email: string, password: string) => {
         // setPersistence is used to make session stored in user current browser
         setPersistence(AuthObj, browserSessionPersistence).then(() => {
+            // defines loading
+            setIsLoading(true)
             // signs in
             return signInUserEmail(AuthObj, email, password)
                 .then(() => {
                     // notifies success
                     queueSnackbar('Logged in', 'success', 'top', 'center')
+                    // defines loading
+                    setIsLoading(false)
                 })
                 .catch(err => {
                     // if error, alerts notistack-def.ts to create a snackbar
@@ -88,6 +95,8 @@ export default function useFirebaseAuth() {
                         'top',
                         'center'
                     )
+                    // defines loading
+                    setIsLoading(false)
                 })
         })
     }
@@ -97,7 +106,9 @@ export default function useFirebaseAuth() {
         email: string,
         password: string,
         user: string
-    ) =>
+    ) => {
+        // defines loading
+        setIsLoading(true)
         createUser(AuthObj, email, password)
             .then(userCredential => {
                 set(ref(DbObj, 'users/' + userCredential.user.uid), {
@@ -106,6 +117,8 @@ export default function useFirebaseAuth() {
 
                 // notifies success
                 queueSnackbar('Logged in', 'success', 'top', 'center')
+                // defines loading
+                setIsLoading(false)
             })
             .catch(err => {
                 // if error, alerts notistack-def.ts to create a snackbar
@@ -115,22 +128,53 @@ export default function useFirebaseAuth() {
                     'top',
                     'center'
                 )
+                // defines loading
+                setIsLoading(false)
             })
+    }
 
     ///////////////////////////// signs out
     const signOut = () => {
+        // defines loading
+        setIsLoading(true)
         sOut(AuthObj).then(() => {
             clear()
 
             // notifies logout
             queueSnackbar('Logged out', 'warning', 'top', 'center')
+            // defines loading
+            setIsLoading(false)
         })
+    }
+
+    const signInWithGithub = () => {
+        setIsLoading(true)
+        signInWithPopup(AuthObj, GithubProvider)
+            .then(() => {
+                // notifies success
+                queueSnackbar('Logged in', 'success', 'top', 'center')
+                // defines loading
+                setIsLoading(false)
+            })
+            .catch(err => {
+                // if error, alerts notistack-def.ts to create a snackbar
+                queueSnackbar(
+                    firebaseErrors[err.code as keyof typeof firebaseErrors],
+                    'error',
+                    'top',
+                    'center'
+                )
+                // defines loading
+                setIsLoading(false)
+            })
     }
 
     return {
         authUser,
+        isLoading,
         signInEmailAndPassword,
         createUserWithEmailAndPassword,
+        signInWithGithub,
         signOut,
     }
 }

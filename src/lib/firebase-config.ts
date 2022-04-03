@@ -1,6 +1,6 @@
 // import initializeApp from firebase
 import { initializeApp, FirebaseApp } from 'firebase/app'
-import { getAuth } from 'firebase/auth'
+import { getAuth, GithubAuthProvider } from 'firebase/auth'
 
 // import database
 import { getDatabase } from 'firebase/database'
@@ -21,6 +21,8 @@ const firebaseConfig = {
 }
 
 // initializeApp on firebase checking if other instance exists
+export const GithubProvider = new GithubAuthProvider()
+
 export const initializedApp: FirebaseApp = initializeApp(firebaseConfig)
 export const initializedDatabase: Database = getDatabase(initializedApp)
 export const initializedAuth: Auth = getAuth(initializedApp)

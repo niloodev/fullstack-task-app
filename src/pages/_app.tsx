@@ -7,14 +7,14 @@ import React from 'react'
 import type { AppProps } from 'next/app'
 
 // framer-motion <3 (dinamic animate framework)
-import { AnimatePresence as Animate } from 'framer-motion'
+import { AnimatePresence } from 'framer-motion'
 
 // global css import
-import GlobalStyle from '../styles/global'
+import GlobalStyle from '../styles/global-style'
 
 // import theme provider from styled components, to share theme with all components.
 import { ThemeProvider } from 'styled-components'
-import colorsVar from '../styles/colors-var'
+import themePalette from '../styles/theme-palette'
 
 // import theme provider from material-ui, integrate it with theme object used by styled components
 import {
@@ -22,7 +22,7 @@ import {
     createTheme,
 } from '@mui/material/styles'
 
-const MUI_colorsVar = createTheme(colorsVar)
+const MUI_colorsVar = createTheme(themePalette)
 
 // material-ui variant module called notistack, it makes popups appear in a imperative way, not needing to
 // controlate the state of the component or something like that.
@@ -36,18 +36,18 @@ import { AuthUserProvider } from '../lib/firebase-auth-provider'
 // free to give a touch.
 // export MyApp "global" / main component, that includes other pages in <Component {...pageProps} />.
 
-export default function MyApp({ Component, pageProps }: AppProps) {
+export default function MyApp({ Component, pageProps, router }: AppProps) {
     return (
-        <ThemeProvider theme={colorsVar}>
+        <ThemeProvider theme={themePalette}>
             <MUI_ThemeProvider theme={MUI_colorsVar}>
                 <SnackbarProvider preventDuplicate={false} maxSnack={1}>
                     <AuthUserProvider>
-                        <Animate exitBeforeEnter>
-                            <Component {...pageProps} />
-                        </Animate>
+                        <AnimatePresence exitBeforeEnter>
+                            <Component {...pageProps} key={router.pathname} />
+                        </AnimatePresence>
+                        <GlobalStyle />
                     </AuthUserProvider>
                 </SnackbarProvider>
-                <GlobalStyle />
             </MUI_ThemeProvider>
         </ThemeProvider>
     )

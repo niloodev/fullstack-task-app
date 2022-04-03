@@ -11,6 +11,7 @@ import useFirebaseAuth from './use-firebase-auth'
 const AuthUserContext = createContext({
     authUser: null,
     authError: '',
+    isLoading: false,
     signInEmailAndPassword: (email: string, password: string) => {
         return { email, password }
     },
@@ -20,6 +21,9 @@ const AuthUserContext = createContext({
         user: string
     ) => {
         return { email, password, user }
+    },
+    signInWithGithub: () => {
+        return
     },
     signOut: () => {
         return

@@ -4,10 +4,10 @@
 import 'styled-components'
 
 // color variables
-import colorsVar from '../styles/colors-var'
+import themePalette from '../styles/theme-palette'
 
 // export of type by color variables
-export type Theme = typeof colorsVar
+export type Theme = typeof themePalette
 
 // declaration of the new Theme type as DefaultTheme
 declare module 'styled-components' {

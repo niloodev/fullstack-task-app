@@ -1,7 +1,8 @@
 /* eslint @typescript-eslint/no-explicit-any: "off" */
+/* eslint @typescript-eslint/no-unused-vars: "off" */
 
 // import react
-import React from 'react'
+import React, { Ref } from 'react'
 
 // framer-motion integration with styled-components + material.ui
 import { motion } from 'framer-motion'
@@ -15,13 +16,19 @@ import {
 } from '@mui/icons-material'
 
 // solid components
-import { Button, TextField } from '@mui/material'
+import {
+    Button,
+    TextField,
+    CircularProgress,
+    ButtonProps,
+    TextFieldProps,
+} from '@mui/material'
 
 // div that centers anything inside it
 export const HundredPercentAlign = Styled(motion.div)`
     position: relative;
     width: 100%; height: 100%;
-    
+
     display: flex; justify-content: center; align-items: center;
 `
 
@@ -59,7 +66,7 @@ export const AuthBox = Styled.div`
 `
 
 // auth-icon is the css settings of the user-icon; used in login and register page
-export const AuthIcon = () => (
+export const AuthIcon = (): JSX.Element => (
     <UserIcon color="warning" style={{ fontSize: '40px' }} />
 )
 
@@ -81,11 +88,16 @@ const LabelError = Styled.div`
     color: ${props => props.theme.palette.error.main};
     bottom: 0px;
     position: absolute;
-    justify-content: center; align-items: center;
+    display: flex; justify-content: center; align-items: center;
     font-size: 12px; 
     width: 100%;
 `
-export const AuthInput = (props: any) => {
+export const AuthInput = ({
+    errorlog = '',
+    ...props
+}: {
+    errorlog: string
+} & TextFieldProps): JSX.Element => {
     return (
         <CapsuleDiv>
             <TextField
@@ -94,11 +106,7 @@ export const AuthInput = (props: any) => {
                 color="warning"
                 style={{ width: '100%' }}
             />
-            <LabelError
-                style={{ display: props.logerror != '' ? 'flex' : 'none' }}
-            >
-                {props.errorlog}
-            </LabelError>
+            <LabelError>{errorlog}</LabelError>
         </CapsuleDiv>
     )
 }
@@ -117,28 +125,42 @@ export const AuthP = Styled.h1`
 // customizable button that fits the application design, a good example of material-ui + Styled components integration.
 const AuthButton_ = Styled(Button)`
         width: 90%;
+        font-size: 14px !important;
 `
 const AuthSpan = Styled.span`
         color: ${props => props.theme.palette.secondary.main};
 `
-export const AuthButton = (props: any) => {
+// here we defined some default values to custom props, and then the optional type of then (? indicator)
+export const AuthButton = React.forwardRef(function AuthButton(
+    {
+        padding = '5px',
+        buttontype = undefined,
+        ...props
+    }: {
+        padding?: string | undefined
+        buttontype?: 'register' | 'login' | 'github' | 'loading' | undefined
+    } & ButtonProps,
+    ref: Ref<any>
+): JSX.Element {
     return (
         <AuthButton_
             {...props}
             variant="contained"
             color="warning"
             style={{
-                paddingTop: props.padding ? props.padding : '5px',
-                paddingBottom: props.padding ? props.padding : '5px',
+                paddingTop: padding,
+                paddingBottom: padding,
             }}
         >
-            {props.buttontype == 'login' || props.buttontype == 'register' ? (
+            {buttontype == 'login' || buttontype == 'register' ? (
                 <CheckIcon color="secondary" />
-            ) : props.buttontype == 'github' ? (
+            ) : buttontype == 'github' ? (
                 <GitHubIcon color="secondary" />
+            ) : buttontype == 'loading' ? (
+                <CircularProgress color="secondary" size="1.5rem" />
             ) : (
                 <AuthSpan>{props.children}</AuthSpan>
             )}
         </AuthButton_>
     )
-}
+})

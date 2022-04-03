@@ -7,7 +7,7 @@ import React from 'react'
 // import { useAuth } from '../../lib/firebase-auth-provider'
 
 // import components from app-components, made by framer-motion, material-ui and styled components.
-import { HundredPercentAlign, AuthBox } from '../../styles/app-components'
+import { HundredPercentAlign, AuthBox } from '../../styles/auth-components'
 
 // head from next.js
 import Head from 'next/head'
@@ -16,10 +16,9 @@ import Head from 'next/head'
 const Dashboard: React.FC = () => {
     return (
         <HundredPercentAlign
-            key="dashboard"
-            initial={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
         >
             {/* head component, makes easy to search engines to encounter and organize this app's pages */}
             <Head>

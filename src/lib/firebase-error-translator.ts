@@ -106,6 +106,7 @@ const firebaseErrors = {
     'auth/user-not-found':
         'There is no existing user record corresponding to the provided identifier.',
     'auth/wrong-password': 'The provided password is incorrect.',
+    'auth/popup-closed-by-user': 'Pop-up was closed by the user.',
     'auth/too-many-requests': 'Too many attempts, try again later.',
     else: 'Server error.',
 }

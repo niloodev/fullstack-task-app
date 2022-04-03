@@ -1,11 +1,11 @@
 ///////////////////////////////////// register page
 
 // react import
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // validate.js to validate inputs and model of validation
 import { validate } from 'validate.js'
-import validateParams from '../../tools/validate-model'
+import validateParams from '../../tools/validatejs-params'
 
 // import components from app-components, made by framer-motion, material-ui and styled components.
 import {
@@ -14,17 +14,20 @@ import {
     AuthInput,
     AuthP,
     AuthButton,
-} from '../../styles/app-components'
+} from '../../styles/auth-components'
 
 // head from next.js
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 // useAuth from firebase-auth-provider
-import { useAuth } from '../../lib/firebase-auth-provider'
+import { useAuth } from '../../lib/firebase-auth-provider' // to component
 
 // page component, type ranks as React.FunctionalComponent (React.FC)
 const Register: React.FC = () => {
+    const [isReady, setIsReady] = useState(false)
+
     // state definition
     const [user, setUser] = useState('')
     const [password, setPassword] = useState('')
@@ -35,22 +38,22 @@ const Register: React.FC = () => {
     const [emailError, setEmailError] = useState<string | undefined>()
 
     // auth information
-    const { authUser, createUserWithEmailAndPassword } = useAuth()
+    const { authUser, isLoading, createUserWithEmailAndPassword } = useAuth()
 
     // check if user is already logged in, if true send it to dashboard
     const router = useRouter()
     useEffect(() => {
         if (authUser) {
             router.push('/users/dashboard')
-        }
+        } else setIsReady(true)
     }, [authUser])
 
-    return (
+    return isReady ? (
         <HundredPercentAlign
-            key="register"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            initial={{ opacity: 0, transform: 'scale(0, 0)' }}
+            animate={{ opacity: 1, transform: 'scale(1, 1)' }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
         >
             {/* head component, makes easy to search engines to encounter and organize this app's pages */}
             <Head>
@@ -70,6 +73,7 @@ const Register: React.FC = () => {
                 {/* auth inputs | user, email and password */}
                 <AuthInput
                     label="User"
+                    disabled={isLoading}
                     value={user}
                     inputProps={{
                         maxLength: 15,
@@ -85,6 +89,7 @@ const Register: React.FC = () => {
                 <AuthInput
                     label="E-mail"
                     type="email"
+                    disabled={isLoading}
                     inputProps={{
                         maxLength: 35,
                     }}
@@ -100,6 +105,7 @@ const Register: React.FC = () => {
                 <AuthInput
                     label="Password"
                     type="password"
+                    disabled={isLoading}
                     inputProps={{
                         maxLength: 35,
                     }}
@@ -114,7 +120,8 @@ const Register: React.FC = () => {
 
                 {/* register button */}
                 <AuthButton
-                    buttontype="register"
+                    disabled={isLoading}
+                    buttontype={!isLoading ? 'register' : 'loading'}
                     onClick={() => {
                         const errors = validate(
                             {
@@ -156,14 +163,13 @@ const Register: React.FC = () => {
                 />
 
                 {/* back button */}
-                <AuthButton
-                    padding="5"
-                    onClick={() => (window.location.href = '/auth/login')}
-                >
-                    BACK
-                </AuthButton>
+                <Link passHref href="/auth/login">
+                    <AuthButton disabled={isLoading}>BACK</AuthButton>
+                </Link>
             </AuthBox>
         </HundredPercentAlign>
+    ) : (
+        <></>
     )
 }
 
