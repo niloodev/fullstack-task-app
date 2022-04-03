@@ -58,9 +58,7 @@ export const AuthBox = Styled.div`
         min-width: auto; min-height: auto;
 
         margin: 10px;
-
         padding: 0;
-        
         border-radius: 0;
     }
 `

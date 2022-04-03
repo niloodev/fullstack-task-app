@@ -18,7 +18,7 @@ export default createGlobalStyle`
     body,
     #__next {
         width: 100%;
-        height: 100%; min-height: 500px;
+        height: 100%; min-height: 450px;
 
         margin: 0;
         padding: 0;
@@ -26,5 +26,20 @@ export default createGlobalStyle`
         font-family: ${props => props.theme.typography.fontFamily};
 
         background-color: ${props => props.theme.palette.primary.main};
+    }
+
+    /* scrollbar customization */
+    ::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: ${props => props.theme.palette.secondary.main};
+        border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: ${props => props.theme.palette.warning.main};
+        border-radius: 5px;
     }
 `

@@ -18,16 +18,17 @@ import {
     createUserWithEmailAndPassword as createUser,
     signInWithEmailAndPassword as signInUserEmail,
     signOut as sOut,
-    signInWithPopup,
+    signInWithRedirect,
     setPersistence,
     browserSessionPersistence,
+    UserCredential,
 } from 'firebase/auth'
 
 // firebase errors | .code to string
 import firebaseErrors from './firebase-error-translator'
 
 // firebase database ref and set's
-import { ref, set } from 'firebase/database'
+import { ref, update } from 'firebase/database'
 
 // declare filterUser interface type
 interface filterUser {
@@ -118,11 +119,11 @@ export default function useFirebaseAuth() {
         // defines loading
         setIsLoading(true)
         createUser(AuthObj, email, password)
-            .then(userCredential => {
-                set(ref(DbObj, 'users/' + userCredential.user.uid), {
+            .then((userCredential: UserCredential) => {
+                // uodate user name on realtime database
+                update(ref(DbObj, 'users/' + userCredential.user.uid), {
                     user: user,
                 })
-
                 // notifies success
                 queueSnackbar('Logged in', 'success', 'top', 'center')
                 // defines loading
@@ -147,7 +148,6 @@ export default function useFirebaseAuth() {
         setIsLoading(true)
         sOut(AuthObj).then(() => {
             clear()
-
             // notifies logout
             queueSnackbar('Logged out', 'warning', 'top', 'center')
             // defines loading
@@ -157,8 +157,12 @@ export default function useFirebaseAuth() {
 
     const signInWithGithub = () => {
         setIsLoading(true)
-        signInWithPopup(AuthObj, GithubProvider)
-            .then(() => {
+        signInWithRedirect(AuthObj, GithubProvider)
+            .then((userCredential: UserCredential) => {
+                // update user name as displayName from github
+                update(ref(DbObj, 'users/' + userCredential.user.uid), {
+                    user: userCredential.user.displayName,
+                })
                 // notifies success
                 queueSnackbar('Logged in', 'success', 'top', 'center')
                 // defines loading
