@@ -9,7 +9,7 @@ import useFirebaseAuth from './firebase-custom-hook'
 // create AuthUserContext format
 // empty functions are just templates, make typescript consider it in syntax
 const AuthUserContext = createContext({
-    authUser: null,
+    authUser: 'waiting',
     authError: '',
     isLoading: false,
     signInEmailAndPassword: (email: string, password: string) => {

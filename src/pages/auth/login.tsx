@@ -43,6 +43,7 @@ const Login: React.FC = () => {
     // check if user is already logged in, if true send it to dashboard
     const router = useRouter()
     useEffect(() => {
+        if (authUser == 'waiting') return
         if (authUser) {
             router.push('/users/dashboard')
         } else {

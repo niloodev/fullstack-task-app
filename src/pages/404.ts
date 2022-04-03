@@ -8,10 +8,11 @@ export default function Custom404() {
     const { authUser } = useAuth()
 
     useEffect(() => {
+        if (authUser == 'waiting') return
         if (authUser) {
             router.replace('/users/dashboard')
         } else router.replace('/auth/login')
-    })
+    }, [authUser])
 
     return null
 }
