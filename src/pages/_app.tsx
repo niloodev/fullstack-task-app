@@ -30,8 +30,8 @@ import { SnackbarProvider } from 'notistack'
 
 // import auth provider
 import { AuthUserProvider } from '../lib/firebase-context-hook-provider'
-import { initializedApp } from '../lib/firebase-config'
-import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
+import { initializedApp } from '../lib/firebase-config' // initialized app to app-check in frontend
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check' // captcha provider
 
 // now, they're using the same object for all the theme three distributed across all application - i dont know if this
 // is the best solution of the problem, but its working | if someone want to feedback this with better integrations, feel
@@ -39,11 +39,13 @@ import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
 // export MyApp "global" / main component, that includes other pages in <Component {...pageProps} />.
 
 export default function MyApp({ Component, pageProps, router }: AppProps) {
+    // on render (client-side) sets appcheck from firebase
     useEffect(() => {
         initializeAppCheck(initializedApp, {
             provider: new ReCaptchaV3Provider(
                 '6Lfq3D0fAAAAAMa23A40f4Ji2wg9ASEd9Zc7mXCl'
             ),
+            isTokenAutoRefreshEnabled: true,
         })
         return () => {
             return

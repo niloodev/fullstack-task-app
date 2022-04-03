@@ -60,6 +60,7 @@ const Register: React.FC = () => {
             <Head>
                 <title>Sign-in | niloodev</title>
 
+                <link rel="shortcut icon" href="/favicon.ico" />
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1"
