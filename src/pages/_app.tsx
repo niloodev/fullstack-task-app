@@ -1,7 +1,7 @@
 ///////////////////////////////////// login page
 
 // react import
-import React from 'react'
+import React, { useEffect } from 'react'
 
 // type 'AppProps" from next/app
 import type { AppProps } from 'next/app'
@@ -30,6 +30,8 @@ import { SnackbarProvider } from 'notistack'
 
 // import auth provider
 import { AuthUserProvider } from '../lib/firebase-context-hook-provider'
+import { initializedApp } from '../lib/firebase-config'
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check'
 
 // now, they're using the same object for all the theme three distributed across all application - i dont know if this
 // is the best solution of the problem, but its working | if someone want to feedback this with better integrations, feel
@@ -37,6 +39,17 @@ import { AuthUserProvider } from '../lib/firebase-context-hook-provider'
 // export MyApp "global" / main component, that includes other pages in <Component {...pageProps} />.
 
 export default function MyApp({ Component, pageProps, router }: AppProps) {
+    useEffect(() => {
+        initializeAppCheck(initializedApp, {
+            provider: new ReCaptchaV3Provider(
+                '6Lfq3D0fAAAAAMa23A40f4Ji2wg9ASEd9Zc7mXCl'
+            ),
+        })
+        return () => {
+            return
+        }
+    })
+
     return (
         <ThemeProvider theme={themePalette}>
             <MUI_ThemeProvider theme={MUI_colorsVar}>
