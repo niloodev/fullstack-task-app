@@ -44,8 +44,12 @@ const Login: React.FC = () => {
     const router = useRouter()
     useEffect(() => {
         if (authUser) {
+            console.log('user')
             router.push('/users/dashboard')
-        } else setIsReady(true)
+        } else {
+            console.log('not user')
+            setIsReady(true)
+        }
     }, [authUser])
 
     return isReady ? (
