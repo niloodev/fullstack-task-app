@@ -4,12 +4,12 @@
 import { useEffect, useState } from 'react'
 
 // notistack definitions hook from notistack-def.ts
-import useNotistack from '../tools/notistack-custom-hook'
+import useNotistack from '../../tools/notistack-custom-hook'
 
 // import of firebase-config, instantiated getAuth() and getDatabase() linked to application
 import {
     initializedAuth as AuthObj,
-    initializedDatabase as DbObj,
+    initializedDatabase as DataObj,
     GithubProvider,
 } from './firebase-config'
 
@@ -24,11 +24,11 @@ import {
     UserCredential,
 } from 'firebase/auth'
 
+// database functions
+import { update, ref } from 'firebase/database'
+
 // firebase errors | .code to string
 import firebaseErrors from './firebase-error-translator'
-
-// firebase database ref and set's
-import { ref, update } from 'firebase/database'
 
 // declare filterUser interface type
 interface filterUser {
@@ -120,11 +120,11 @@ export default function useFirebaseAuth() {
         setIsLoading(true)
         createUser(AuthObj, email, password)
             .then((userCredential: UserCredential) => {
-                // uodate user name on realtime database
-                update(ref(DbObj, 'users/' + userCredential.user.uid), {
-                    user: user,
+                // update user name (creates if it not exists)
+                update(ref(DataObj, 'user/' + userCredential.user.uid), {
+                    userName: user,
                 })
-                // notifies success
+                // uodate user name on realtime database
                 queueSnackbar('Logged in', 'success', 'top', 'center')
                 // defines loading
                 setIsLoading(false)
@@ -159,9 +159,9 @@ export default function useFirebaseAuth() {
         setIsLoading(true)
         signInWithPopup(AuthObj, GithubProvider)
             .then((userCredential: UserCredential) => {
-                // update user name as displayName from github
-                update(ref(DbObj, 'users/' + userCredential.user.uid), {
-                    user: userCredential.user.displayName,
+                // update user name (creates if it not exists)
+                update(ref(DataObj, 'user/' + userCredential.user.uid), {
+                    userName: userCredential.user.displayName,
                 })
                 // notifies success
                 queueSnackbar('Logged in', 'success', 'top', 'center')

@@ -4,7 +4,7 @@ import type { PropsWithChildren, ReactNode } from 'react'
 
 // import createContext to create, useContext to export context as hook
 import { createContext, useContext } from 'react'
-import useFirebaseAuth from './firebase-custom-hook'
+import useFirebaseAuth from '../firebase/firebase-custom-hook'
 
 // create AuthUserContext format
 // empty functions are just templates, make typescript consider it in syntax

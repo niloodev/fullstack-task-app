@@ -29,8 +29,8 @@ const MUI_colorsVar = createTheme(themePalette)
 import { SnackbarProvider } from 'notistack'
 
 // import auth provider
-import { AuthUserProvider } from '../lib/firebase-context-hook-provider'
-import { initializedApp } from '../lib/firebase-config' // initialized app to app-check in frontend
+import { AuthUserProvider } from '../lib/firebase/firebase-context-hook-provider'
+import { initializedApp } from '../lib/firebase/firebase-config' // initialized app to app-check in frontend
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check' // captcha provider
 
 // now, they're using the same object for all the theme three distributed across all application - i dont know if this
@@ -38,7 +38,10 @@ import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check' // 
 // free to give a touch.
 // export MyApp "global" / main component, that includes other pages in <Component {...pageProps} />.
 
-export default function MyApp({ Component, pageProps, router }: AppProps) {
+// redux provider
+import withWrapper from '../lib/redux/store/store'
+
+function MyApp({ Component, pageProps, router }: AppProps) {
     // on render (client-side) sets appcheck from firebase
     useEffect(() => {
         initializeAppCheck(initializedApp, {
@@ -53,10 +56,15 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
     })
 
     return (
+        //styled components theme provider
         <ThemeProvider theme={themePalette}>
+            {/* MUI theme provider */}
             <MUI_ThemeProvider theme={MUI_colorsVar}>
+                {/* snackbar imperative | notistack provider */}
                 <SnackbarProvider preventDuplicate={false} maxSnack={1}>
+                    {/* auth provider | context */}
                     <AuthUserProvider>
+                        {/* animate the enter and exit from pages */}
                         <AnimatePresence exitBeforeEnter>
                             <Component {...pageProps} key={router.pathname} />
                         </AnimatePresence>
@@ -67,3 +75,5 @@ export default function MyApp({ Component, pageProps, router }: AppProps) {
         </ThemeProvider>
     )
 }
+
+export default withWrapper.withRedux(MyApp)

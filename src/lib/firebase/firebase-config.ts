@@ -3,11 +3,10 @@ import { initializeApp, FirebaseApp } from 'firebase/app'
 import { getAuth, GithubAuthProvider } from 'firebase/auth'
 
 // import database
-import { getDatabase } from 'firebase/database'
+import { getDatabase, Database } from 'firebase/database'
 
 // type import
 import type { Auth } from 'firebase/auth'
-import type { Database } from 'firebase/database'
 
 // sets config
 const firebaseConfig = {

@@ -10,7 +10,7 @@ const colors = {
             main: '#EDEDED',
         },
         warning: {
-            main: '#ff4d4d',
+            main: '#4b9e28',
         },
         error: {
             main: '#d32f2f',

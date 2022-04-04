@@ -10,7 +10,7 @@ import Styled from 'styled-components'
 
 // some components | icons
 import {
-    AccountCircleRounded as UserIcon,
+    CodeOutlined as UserIcon,
     GitHub as GitHubIcon,
     Check as CheckIcon,
 } from '@mui/icons-material'

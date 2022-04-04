@@ -4,7 +4,7 @@
 import React, { useEffect, useState } from 'react'
 
 // import auth state
-import { useAuth } from '../../lib/firebase-context-hook-provider' // to component
+import { useAuth } from '../../lib/firebase/firebase-context-hook-provider' // to component
 
 // validate.js to validate inputs and model of validation
 import { validate } from 'validate.js'
@@ -18,7 +18,7 @@ import {
     AuthIcon,
     AuthButton,
     AuthSeparator,
-} from '../../styles/auth-components'
+} from '../../components/auth-components'
 
 // head from next.js
 import Head from 'next/head'
