@@ -48,7 +48,7 @@ const RouteProtectWrapper = ({
     }, [authUser])
 
     // conditional render
-    return isReady ? <> {children} </> : <div></div>
+    return isReady ? <> {children} </> : <></>
 }
 
 export default RouteProtectWrapper

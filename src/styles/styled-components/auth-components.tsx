@@ -33,7 +33,7 @@ export const HundredPercentAlign = Styled(motion.div)`
 `
 
 // auth-box its basically the container of the form
-export const AuthBox = Styled.div`
+export const AuthBox = Styled(motion.div)`
     position: absolute;
     min-width: 300px;
     min-height: 400px;

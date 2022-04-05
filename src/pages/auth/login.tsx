@@ -43,8 +43,8 @@ const Login = () => {
 
     return (
         <HundredPercentAlign
-            initial={{ opacity: 0, transform: 'scale(0, 0)' }}
-            animate={{ opacity: 1, transform: 'scale(1, 1)' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
         >
@@ -60,7 +60,11 @@ const Login = () => {
             </Head>
 
             {/* form box */}
-            <AuthBox>
+            <AuthBox
+                initial={{ transform: 'scale(0, 0)' }}
+                animate={{ transform: 'scale(1, 1)' }}
+                exit={{ transform: 'scale(0, 0)' }}
+            >
                 {/* auth icon */}
                 <AuthIcon />
 
