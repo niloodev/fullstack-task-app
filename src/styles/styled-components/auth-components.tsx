@@ -30,6 +30,7 @@ export const HundredPercentAlign = Styled(motion.div)`
     width: 100%; height: 100%;
 
     display: flex; justify-content: center; align-items: center;
+    overflow: hidden;
 `
 
 // auth-box its basically the container of the form

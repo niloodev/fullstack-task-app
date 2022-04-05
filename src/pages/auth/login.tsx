@@ -61,9 +61,9 @@ const Login = () => {
 
             {/* form box */}
             <AuthBox
-                initial={{ transform: 'scale(0, 0)' }}
+                initial={{ transform: 'scale(0.6, 0.6)' }}
                 animate={{ transform: 'scale(1, 1)' }}
-                exit={{ transform: 'scale(0, 0)' }}
+                exit={{ transform: 'scale(0.6, 0.6)' }}
             >
                 {/* auth icon */}
                 <AuthIcon />
