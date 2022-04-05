@@ -1,11 +1,12 @@
 // simple next-page to redirect to login page or dashboard.
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useAuth } from '../lib/firebase/firebase-context-hook-provider'
+
+import { useSelector } from 'react-redux'
 
 export default function Custom404() {
     const router = useRouter()
-    const { authUser } = useAuth()
+    const authUser = useSelector(state => state.auth.authUser)
 
     useEffect(() => {
         if (authUser == 'waiting') return

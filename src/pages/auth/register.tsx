@@ -1,7 +1,7 @@
 ///////////////////////////////////// register page
 
 // react import
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 // validate.js to validate inputs and model of validation
 import { validate } from 'validate.js'
@@ -14,20 +14,20 @@ import {
     AuthInput,
     AuthP,
     AuthButton,
-} from '../../components/auth-components'
+} from '../../styles/styled-components/auth-components'
 
 // head from next.js
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-// useAuth from firebase-auth-provider
-import { useAuth } from '../../lib/firebase/firebase-context-hook-provider' // to component
+// get auth from redux
+import { useSelector } from 'react-redux'
+
+// get wrapper to protect route
+import RouteProtectWrapper from '../../tools/route-protect-wrapper'
 
 // page component, type ranks as React.FunctionalComponent (React.FC)
-const Register: React.FC = () => {
-    const [isReady, setIsReady] = useState(false)
-
+const Register = () => {
     // state definition
     const [user, setUser] = useState('')
     const [password, setPassword] = useState('')
@@ -37,19 +37,12 @@ const Register: React.FC = () => {
     const [passError, setPassError] = useState<string | undefined>()
     const [emailError, setEmailError] = useState<string | undefined>()
 
-    // auth information
-    const { authUser, isLoading, createUserWithEmailAndPassword } = useAuth()
+    // auth state
+    const { isLoading, createUserWithEmailAndPassword } = useSelector(
+        state => state.auth
+    )
 
-    // check if user is already logged in, if true send it to dashboard
-    const router = useRouter()
-    useEffect(() => {
-        if (authUser == 'waiting') return
-        if (authUser) {
-            router.push('/users/dashboard')
-        } else setIsReady(true)
-    }, [authUser])
-
-    return isReady ? (
+    return (
         <HundredPercentAlign
             initial={{ opacity: 0, transform: 'scale(0, 0)' }}
             animate={{ opacity: 1, transform: 'scale(1, 1)' }}
@@ -170,9 +163,13 @@ const Register: React.FC = () => {
                 </Link>
             </AuthBox>
         </HundredPercentAlign>
-    ) : (
-        <></>
     )
 }
 
-export default Register
+const RegisterProtectWrapper = () => (
+    <RouteProtectWrapper ifAuthUser="logged" redirect="/users/dashboard">
+        <Register />
+    </RouteProtectWrapper>
+)
+
+export default RegisterProtectWrapper

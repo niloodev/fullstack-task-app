@@ -1,10 +1,10 @@
 ///////////////////////////////////// login page
 
 // react import
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
-// import auth state
-import { useAuth } from '../../lib/firebase/firebase-context-hook-provider' // to component
+// import auth state from redux
+import { useSelector } from 'react-redux'
 
 // validate.js to validate inputs and model of validation
 import { validate } from 'validate.js'
@@ -18,17 +18,17 @@ import {
     AuthIcon,
     AuthButton,
     AuthSeparator,
-} from '../../components/auth-components'
+} from '../../styles/styled-components/auth-components'
 
 // head from next.js
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 
-// page component, type ranks as React.FunctionalComponent (React.FC)
-const Login: React.FC = () => {
-    const [isReady, setIsReady] = useState(false)
+// get wrapper to protect route
+import RouteProtectWrapper from '../../tools/route-protect-wrapper'
 
+// page component, type ranks as React.FunctionalComponent (React.FC)
+const Login = () => {
     // state of input values (controlled component) and errors log.
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
@@ -37,21 +37,11 @@ const Login: React.FC = () => {
     const [emailError, setEmailError] = useState<string | undefined>()
 
     // auth state
-    const { authUser, isLoading, signInEmailAndPassword, signInWithGithub } =
-        useAuth()
+    const { isLoading, signInEmailAndPassword, signInWithGithub } = useSelector(
+        state => state.auth
+    )
 
-    // check if user is already logged in, if true send it to dashboard
-    const router = useRouter()
-    useEffect(() => {
-        if (authUser == 'waiting') return
-        if (authUser) {
-            router.push('/users/dashboard')
-        } else {
-            setIsReady(true)
-        }
-    }, [authUser])
-
-    return isReady ? (
+    return (
         <HundredPercentAlign
             initial={{ opacity: 0, transform: 'scale(0, 0)' }}
             animate={{ opacity: 1, transform: 'scale(1, 1)' }}
@@ -156,9 +146,13 @@ const Login: React.FC = () => {
                 </Link>
             </AuthBox>
         </HundredPercentAlign>
-    ) : (
-        <></>
     )
 }
 
-export default Login
+const LoginProtectWrapper = () => (
+    <RouteProtectWrapper ifAuthUser="logged" redirect="/users/dashboard">
+        <Login />
+    </RouteProtectWrapper>
+)
+
+export default LoginProtectWrapper

@@ -1,18 +1,50 @@
 // import AnyAction type from redux, and some action-types
 import { AnyAction } from 'redux'
-import { SET_TODO } from '../constants/action-types'
-
+// get all action-types
+import {
+    SET_TODO,
+    SET_AUTHUSER,
+    SET_ISLOADING,
+    SET_AUTHFUNCTIONS,
+} from '../constants/action-types'
+// get store initial state to put on reducer
 import InitialState from '../store-initial-state'
 
-// basic reducer
+// auth reducer
 function rootReducer(state = InitialState, action: AnyAction) {
-    switch (action.payload) {
+    switch (action.type) {
+        //// AUTH SECTION
+        case SET_AUTHUSER:
+            return {
+                ...state,
+                auth: { ...state.auth, authUser: action.payload },
+            }
+            break
+        case SET_ISLOADING:
+            return {
+                ...state,
+                auth: { ...state.auth, isLoading: action.payload },
+            }
+            break
+        case SET_AUTHFUNCTIONS:
+            return {
+                ...state,
+                auth: {
+                    ...state.auth,
+                    signInEmailAndPassword:
+                        action.payload.signInEmailAndPassword,
+                    createUserWithEmailAndPassword:
+                        action.payload.createUserWithEmailAndPassword,
+                    signInWithGithub: action.payload.signInWithGithub,
+                    signOut: action.payload.signOut,
+                },
+            }
+            break
+        ////
         case SET_TODO:
-            // action.payload is toDo name
             return { ...state, toDo: action.payload }
             break
     }
-
     return state
 }
 
