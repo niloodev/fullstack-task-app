@@ -15,9 +15,10 @@ import {
     HundredPercentAlign,
     AuthBox,
     AuthInput,
-    AuthIcon,
     AuthButton,
     AuthSeparator,
+    AuthP,
+    AuthCredits,
 } from '../../styles/styled-components/auth-components'
 
 // head from next.js
@@ -66,7 +67,7 @@ const Login = () => {
                 exit={{ transform: 'scale(0.6, 0.6)' }}
             >
                 {/* auth icon */}
-                <AuthIcon />
+                <AuthP>{'<TaskApp />'}</AuthP>
 
                 {/* auth separator */}
                 <AuthSeparator />
@@ -148,6 +149,12 @@ const Login = () => {
                 <Link passHref href="/auth/register">
                     <AuthButton disabled={isLoading}>REGISTER</AuthButton>
                 </Link>
+
+                {/* credits */}
+                <AuthCredits>
+                    created by&nbsp;
+                    <Link href="https://www.github.com/niloodev">niloodev</Link>
+                </AuthCredits>
             </AuthBox>
         </HundredPercentAlign>
     )

@@ -121,6 +121,25 @@ export const AuthP = Styled.h1`
     margin: 0; padding: 0;
 `
 
+// credits
+export const AuthCredits = Styled.div`
+    position: absolute;
+    width: 100%;
+    display: inline-block; text-align: center;
+
+    font-size: 10px;
+    bottom: 10px;
+    color: ${props => props.theme.palette.warning.main};
+
+    a {
+        color: ${props => props.theme.palette.warning.main};
+    }
+
+    a:hover {
+        opacity: 0.8;
+    }
+`
+
 // customizable button that fits the application design, a good example of material-ui + Styled components integration.
 const AuthButton_ = Styled(Button)`
         width: 90%;
