@@ -46,8 +46,7 @@ export const TaskList = ({
 const ListDisplayStyled = Styled(motion.div)`
     border-radius: 5px;
     grid-area: display;
-    /* background-color: ${props => props.theme.palette.secondary.main}; */
-    background-color: blue;
+    background-color: ${props => props.theme.palette.warning.main};
 `
 
 export const ListDisplay = () => {
