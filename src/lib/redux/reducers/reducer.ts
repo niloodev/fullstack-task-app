@@ -2,7 +2,7 @@
 import { AnyAction } from 'redux'
 // get all action-types
 import {
-    SET_TODO,
+    SET_USERINFO,
     SET_AUTHUSER,
     SET_ISLOADING,
     SET_AUTHFUNCTIONS,
@@ -41,8 +41,8 @@ function rootReducer(state = InitialState, action: AnyAction) {
             }
             break
         ////
-        case SET_TODO:
-            return { ...state, toDo: action.payload }
+        case SET_USERINFO:
+            return { ...state, user: action.payload }
             break
     }
     return state

@@ -8,8 +8,8 @@ import {
     DashboardMain,
     TaskList,
     ListDisplay,
-} from '../../styles/styled-components/dashboard-components'
-import SideBar from '../../styles/styled-components/dashboard-side-bar'
+} from '../../styles/styled-components/dashboard-main-components'
+import SideBar from '../../styles/styled-components/dashboard-side-components'
 
 // head from next.js
 import Head from 'next/head'

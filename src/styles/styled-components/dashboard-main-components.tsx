@@ -15,14 +15,25 @@ export const DashboardMain = Styled(motion.main)`
     display: grid;
     grid-template-rows: 1fr 3fr;
     grid-template-columns: 1fr 3fr;
-
     grid-template-areas: "side display" 
                          "side task";
-
     gap: 5px;
+    overflow: hidden;
+
+    @media(max-width: 600px) {
+        width: 100%;
+        height: 100%;
+        padding: 0px;
+
+        grid-template-rows: 1fr 3fr;
+        grid-template-columns: 3fr;
+
+        grid-template-areas: "display" 
+                             "task";
+    }
 `
 
-// taskList will render all tasks provided in props
+//// taskList will render all tasks provided in props
 const TaskListDiv = Styled(motion.div)`
     display: flex;
     flex-flow: column;
@@ -42,7 +53,7 @@ export const TaskList = ({
     return <TaskListDiv {...props}></TaskListDiv>
 }
 
-// will display the list name, and
+//// will display the list name, and some date info
 const ListDisplayStyled = Styled(motion.div)`
     border-radius: 5px;
     grid-area: display;

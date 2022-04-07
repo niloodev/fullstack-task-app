@@ -1,8 +1,5 @@
 // initial state
 export default {
-    toDoList: [],
-    toDo: '',
-
     auth: {
         authUser: 'waiting',
         isLoading: false,
@@ -19,13 +16,14 @@ export default {
             return
         },
     },
+    user: {
+        userName: '',
+    },
 }
 
 export interface InitialStateType {
-    toDoList: Array<unknown>
-    toDo: string
     auth: {
-        authUser: FilterUser | string | null
+        authUser: FilterAuth | string | null
         isLoading: boolean
         signInEmailAndPassword: (email: string, password: string) => void
         createUserWithEmailAndPassword: (
@@ -36,9 +34,14 @@ export interface InitialStateType {
         signInWithGithub: () => void
         signOut: () => void
     }
+    user: FilterUser
+}
+
+export interface FilterAuth {
+    uid: string
+    email: string | null
 }
 
 export interface FilterUser {
-    uid: string
-    email: string | null
+    userName: string
 }
