@@ -1,14 +1,12 @@
-// import initializeApp from firebase
+// Import from Firebase
 import { initializeApp, FirebaseApp } from 'firebase/app'
 import { getAuth, GithubAuthProvider } from 'firebase/auth'
-
-// import database
 import { getDatabase, Database } from 'firebase/database'
 
-// type import
+// Type import.
 import type { Auth } from 'firebase/auth'
 
-// sets config
+// Sets config.
 const firebaseConfig = {
     apiKey: 'AIzaSyBn1UILO8jnQ-MsTIdlzlTgPz-_7lscsqw',
     authDomain: 'niloodev-full-stack-task-app.firebaseapp.com',
@@ -19,7 +17,7 @@ const firebaseConfig = {
     measurementId: 'G-EZLLS83HPL',
 }
 
-// initializeApp on firebase checking if other instance exists
+// Export all new instances to application.
 export const GithubProvider = new GithubAuthProvider()
 
 export const initializedApp: FirebaseApp = initializeApp(firebaseConfig)

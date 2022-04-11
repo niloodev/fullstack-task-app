@@ -1,4 +1,4 @@
-// simple next-page to redirect to login page or dashboard.
+// Simple 404 page to do redirection base on session state.
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 

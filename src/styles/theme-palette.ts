@@ -1,7 +1,9 @@
-// colors variable of the theme used in the application, this will be applied to styled-components and material-ui theme
-// providers respectively.
+// 🐸: This object represents all colors and CSS definitions, it will be applied on Styled Components and
+// Material UI providers respectively.
 
-const colors = {
+const themePalette = {
+    // 🐸: The "palette.color.main" format is to follow Material UI default theme object.
+    // You can see more about it here: https://mui.com/customization/theming/
     palette: {
         primary: {
             main: '#121212',
@@ -21,4 +23,4 @@ const colors = {
     },
 }
 
-export default colors
+export default themePalette

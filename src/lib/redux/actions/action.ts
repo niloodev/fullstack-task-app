@@ -1,5 +1,4 @@
-// import action-types constants (avoid using strings)
-
+// Import action-types constants. (🐸: Avoid using strings!)
 import {
     SET_AUTHUSER,
     SET_ISLOADING,
@@ -8,7 +7,7 @@ import {
 } from '../constants/action-types'
 import { FilterAuth, FilterUser } from '../store-initial-state'
 
-// auth actions
+// Auth actions.
 export function setAuthUser(payload: FilterAuth | null | string) {
     return { type: SET_AUTHUSER, payload }
 }
@@ -21,7 +20,7 @@ export function setAuthFunctions(payload: unknown) {
     return { type: SET_AUTHFUNCTIONS, payload }
 }
 
-// user acitons
+// User actions.
 export function setUserInfo(payload: FilterUser) {
     return { type: SET_USERINFO, payload }
 }

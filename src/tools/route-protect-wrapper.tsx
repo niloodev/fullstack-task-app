@@ -1,15 +1,15 @@
-///////////////////////////////////// auth route protect wrapper
+// Route Protect Wrapper
 
-// I decided to transform the useEffect form of redirect in a wrapper, to make it easily applicable in all
+// I decided to transform the "useEffect" form of redirect in a wrapper, to make it easily applicable in all
 // application pages.
 
-// react import
+// React import.
 import React, { PropsWithChildren, useState, useEffect } from 'react'
 
-// from next
+// From Next.
 import { useRouter } from 'next/router'
 
-// import auth state from redux
+// Get hook of redux.
 import { useSelector } from 'react-redux'
 
 const RouteProtectWrapper = ({
@@ -20,11 +20,11 @@ const RouteProtectWrapper = ({
     redirect: string
     ifAuthUser: 'logged' | 'unlogged' | 'waiting' | 'any'
 }) => {
-    // define isReady to control renderization
+    // Define isReady to control renderization.
     const [isReady, setIsReady] = useState(false)
-    // get user info
+    // Get user info.
     const authUser = useSelector(state => state.auth.authUser)
-    // get router
+    // Get router.
     const router = useRouter()
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const RouteProtectWrapper = ({
         }
     }, [authUser])
 
-    // conditional render
+    // Conditional rendering.
     return isReady ? <> {children} </> : <></>
 }
 

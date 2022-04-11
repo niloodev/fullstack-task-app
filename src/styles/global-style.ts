@@ -1,11 +1,10 @@
-// global css with styled-components + framer-motion, exporting an object
+// Global CSS of application.
 import { createGlobalStyle } from 'styled-components'
 
-// export
 export default createGlobalStyle`
-    /* ------------- font "Work Sans" from Google Fonts*/
+    /* ------------- Font "Work Sans" from Google Fonts. */
     @font-face {
-        font-family: 'Work Sans';
+        font-family: "Work Sans";
         font-style: normal;
         font-weight: 100;
         font-display: swap;
@@ -13,7 +12,19 @@ export default createGlobalStyle`
         unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
     }
 
-    /* ------------- html, body css definition*/
+    /* CSS variables definition. */
+    :root {
+        /* Colors */
+        --color-primary: ${props => props.theme.palette.primary.main};
+        --color-secondary: ${props => props.theme.palette.secondary.main};
+        --color-warning: ${props => props.theme.palette.warning.main};
+        --color-error: ${props => props.theme.palette.error.main};
+
+        /* Font */
+        --font: ${props => props.theme.typography.fontFamily};
+    }
+
+    /* ------------- HTML and main tags definition. */
     html,
     body,
     #__next {
@@ -23,23 +34,23 @@ export default createGlobalStyle`
         margin: 0;
         padding: 0;
 
-        font-family: ${props => props.theme.typography.fontFamily};
+        font-family: var(--font);
 
-        background-color: ${props => props.theme.palette.primary.main};
+        background-color: var(--color-primary);
     }
 
-    /* scrollbar customization */
+    /* Scrollbar customization. */
     ::-webkit-scrollbar {
         width: 2px;
     }
 
     ::-webkit-scrollbar-track {
-        background-color: ${props => props.theme.palette.secondary.main};
+        background-color: var(--color-secondary);
         border-radius: 5px;
     }
 
     ::-webkit-scrollbar-thumb {
-        background-color: ${props => props.theme.palette.warning.main};
+        background-color: var(--color-warning);
         border-radius: 5px;
     }
 `

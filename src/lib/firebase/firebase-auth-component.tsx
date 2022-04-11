@@ -1,21 +1,21 @@
 /* eslint @typescript-eslint/no-explicit-any: "off" */
 
-import React from 'react'
+// React import.
+import React, { useEffect } from 'react'
 
-// here we will create a hook state, it will be used as tracker of session state
-import { useEffect } from 'react'
-
-// notistack definitions hook from notistack-def.ts
+// Notistack definitions hook from notistack-custom-hook.
 import useNotistack from '../../tools/notistack-custom-hook'
 
-// import of firebase-config, instantiated getAuth() and getDatabase() linked to application
+// 🐸: Import of firebase-config, instantiated getAuth() and getDatabase() linked to application.
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check' // AppCheck ReCaptchaV3 provider.
 import {
+    initializedApp,
     initializedAuth as AuthObj,
     initializedDatabase as DataObj,
     GithubProvider,
 } from './firebase-config'
 
-// some of the auth functions provided by auth module of firebase application
+// Some of the auth functions provided by Firebase library.
 import {
     createUserWithEmailAndPassword as createUser,
     signInWithEmailAndPassword as signInUserEmail,
@@ -26,14 +26,14 @@ import {
     UserCredential,
 } from 'firebase/auth'
 
-// database functions
+// Database functions provided by Firebase.
 import { update, ref, get, onValue, DataSnapshot } from 'firebase/database'
 
-// firebase errors | .code to string
+// Firebase errors translation | code to string.
 import firebaseErrors from './firebase-error-translator'
 import type { FilterAuth } from '../redux/store-initial-state'
 
-// get redux selector and other react-redux related components
+// Get Redux selector and other React and Redux related components.
 import { useDispatch } from 'react-redux'
 import {
     setAuthUser,
@@ -42,44 +42,55 @@ import {
     setUserInfo,
 } from '../redux/actions/action'
 
-// filterAuthUser to frontend
+// Function to filter user information to send to global state of application.
 const filterAuthUser = (user: any): FilterAuth => ({
     uid: user.uid,
     email: user.email,
 })
 
-// export state function
 export default function FirebaseAuth() {
-    // get states from redux, to update in this component
+    // Get states from Redux, to update in this component.
     const dispatch = useDispatch()
     let unsubscribe: () => void | undefined
 
-    // to alert errors
+    // To alert errors.
     const { queueSnackbar } = useNotistack()
 
-    // on component did mount, create functions constants and dispatch it to redux
+    // On mount (client-side) sets AppCheck from Firebase.
     useEffect(() => {
-        // function that will be called everytime AuthState changes, by firebase own event trigger
+        initializeAppCheck(initializedApp, {
+            provider: new ReCaptchaV3Provider(
+                '6Lfq3D0fAAAAAMa23A40f4Ji2wg9ASEd9Zc7mXCl'
+            ),
+            isTokenAutoRefreshEnabled: true,
+        })
+        return () => {
+            return
+        }
+    })
+
+    // On mount, create functions and dispatch it to Redux.
+    useEffect(() => {
+        // Function that will be called everytime AuthState changes, by Firebase own event trigger.
         const authStateChanged = (authState: any) => {
             if (!authState) {
                 dispatch(setAuthUser(null))
                 return
             }
 
-            // now we will set some listeners to update client user info based on realtime database
-            // the auth will be in state.auth, and user info in state.user
-            // this is a good practice since firebase provides auth and user in different locations too.
+            // 🐸: Now we will set some listeners to update client user info based on realtime database.
+            // 🛑: The auth data will be in "state.auth", and user data in "state.user".
+            // This is a good practice since Firebase provides auth and user informations in different locations too.
             const userRef = ref(DataObj, 'user/' + authState.uid)
-            // get first snapshot, and dispatch it
+            // Get first snapshot, and dispatch it.
             get(userRef).then(snapshot => {
                 if (snapshot.exists()) {
                     const val = snapshot.val()
                     dispatch(setUserInfo({ userName: val.userName }))
                 }
             })
-            // sets listener to changes in this user info (realtime database)
-            // unsubscribe is a variable that is defined outside this scope, its used to
-            // store the "remove listener" function
+            // 🐸: Sets listener to changes in user information.
+            // The "unsubscribe" variable that is defined outside this scope, its used to store the "remove listener" function.
             unsubscribe = onValue(userRef, (snapshot: DataSnapshot) => {
                 if (snapshot.exists()) {
                     const val = snapshot.val()
@@ -87,36 +98,36 @@ export default function FirebaseAuth() {
                 }
             })
 
-            // filter user info (get only a few properties) and pass it to authUser
+            // Filter user information and dispatch it.
             var formattedUser = filterAuthUser(authState)
             dispatch(setAuthUser(formattedUser))
         }
 
-        // initialize auth listener
+        // Initialize auth listener.
         const del = AuthObj.onAuthStateChanged(authStateChanged)
 
-        ///////////////////////////// clear state
+        ///////////////////////////// Clear the state | this is called after SignOut mostly times.
         const clear = () => {
             if (unsubscribe) unsubscribe()
             dispatch(setAuthUser(null))
         }
 
-        ///////////////////////////// sign in with email and password function
+        ///////////////////////////// Sign-in with email and password function.
         const signInEmailAndPassword = (email: string, password: string) => {
-            // setPersistence is used to make session stored in user current browser
+            // The "setPersistence" function is used to make session stored in the current browser.
             setPersistence(AuthObj, browserSessionPersistence).then(() => {
-                // defines loading
+                // Sets loading.
                 dispatch(setIsLoading(true))
-                // signs in
+                // Signs in.
                 return signInUserEmail(AuthObj, email, password)
                     .then(() => {
-                        // notifies success
+                        // Notifies success.
                         queueSnackbar('Logged in', 'success', 'top', 'center')
-                        // defines loading
+                        // Sets loading.
                         dispatch(setIsLoading(false))
                     })
                     .catch(err => {
-                        // if error, alerts notistack-def.ts to create a snackbar
+                        // If error, alerts notistack-custom-hook.ts to create an error snackbar.
                         queueSnackbar(
                             firebaseErrors[
                                 err.code as keyof typeof firebaseErrors
@@ -125,85 +136,89 @@ export default function FirebaseAuth() {
                             'top',
                             'center'
                         )
-                        // defines loading
+                        // Sets loading.
                         dispatch(setIsLoading(false))
                     })
             })
         }
 
-        ///////////////////////////// create user with password, sets userName on dynamic database after it
+        ///////////////////////////// Create user with password, sets "userName" on realtime database after it.
         const createUserWithEmailAndPassword = (
             email: string,
             password: string,
             user: string
         ) => {
-            // defines loading
+            // Sets loading.
             dispatch(setIsLoading(true))
+            // Creates the user. (This function creates and authenticate the user, without the needing to call sign-in function).
             createUser(AuthObj, email, password)
                 .then((userCredential: UserCredential) => {
-                    // update user name (creates if it not exists)
+                    // Update user name (creates if it not exists).
                     update(ref(DataObj, 'user/' + userCredential.user.uid), {
                         userName: user,
                     })
-                    // uodate user name on realtime database
+                    // Notifies success.
                     queueSnackbar('Logged in', 'success', 'top', 'center')
-                    // defines loading
+                    // Sets loading.
                     dispatch(setIsLoading(false))
                 })
                 .catch(err => {
-                    // if error, alerts notistack-def.ts to create a snackbar
+                    // If error, alerts notistack-custom-hook.ts to create an error snackbar.
                     queueSnackbar(
                         firebaseErrors[err.code as keyof typeof firebaseErrors],
                         'error',
                         'top',
                         'center'
                     )
-                    // defines loading
+                    // Sets loading.
                     dispatch(setIsLoading(false))
                 })
         }
 
-        ///////////////////////////// signs out
-        const signOut = () => {
-            // defines loading
+        ///////////////////////////// Sign-in with Github.
+        const signInWithGithub = () => {
+            // Sets loading.
             dispatch(setIsLoading(true))
+            // Sign-in with popup.
+            signInWithPopup(AuthObj, GithubProvider)
+                .then((userCredential: UserCredential) => {
+                    // Update user name (creates if it not exists).
+                    update(ref(DataObj, 'user/' + userCredential.user.uid), {
+                        userName: userCredential.user.displayName,
+                    })
+                    // Notifies success.
+                    queueSnackbar('Logged in', 'success', 'top', 'center')
+                    // Sets loading.
+                    dispatch(setIsLoading(false))
+                })
+                .catch(err => {
+                    // If error, alerts notistack-custom-hook.ts to create an error snackbar.
+                    queueSnackbar(
+                        firebaseErrors[err.code as keyof typeof firebaseErrors],
+                        'error',
+                        'top',
+                        'center'
+                    )
+                    // Sets loading.
+                    dispatch(setIsLoading(false))
+                })
+        }
+
+        ///////////////////////////// Signs out.
+        const signOut = () => {
+            // Sets loading.
+            dispatch(setIsLoading(true))
+            // Signs out, and then call clear() function.
             sOut(AuthObj).then(() => {
                 clear()
-                // notifies logout
+                // Notifies logout.
                 queueSnackbar('Logged out', 'warning', 'top', 'center')
-                // defines loading
+                // Sets loading.
                 dispatch(setIsLoading(false))
             })
         }
 
-        ///////////////////////////// signs with github
-        const signInWithGithub = () => {
-            dispatch(setIsLoading(true))
-            signInWithPopup(AuthObj, GithubProvider)
-                .then((userCredential: UserCredential) => {
-                    // update user name (creates if it not exists)
-                    update(ref(DataObj, 'user/' + userCredential.user.uid), {
-                        userName: userCredential.user.displayName,
-                    })
-                    // notifies success
-                    queueSnackbar('Logged in', 'success', 'top', 'center')
-                    // defines loading
-                    dispatch(setIsLoading(false))
-                })
-                .catch(err => {
-                    // if error, alerts notistack-def.ts to create a snackbar
-                    queueSnackbar(
-                        firebaseErrors[err.code as keyof typeof firebaseErrors],
-                        'error',
-                        'top',
-                        'center'
-                    )
-                    // defines loading
-                    dispatch(setIsLoading(false))
-                })
-        }
-
-        // dispatch all event triggers
+        // Dispatch all authentication functions.
         dispatch(
             setAuthFunctions({
                 signInEmailAndPassword,

@@ -1,16 +1,18 @@
-// import AnyAction type from redux, and some action-types
+// Import AnyAction type from Redux.
 import { AnyAction } from 'redux'
-// get all action-types
+
+// Get all action-types constants from action-types.
 import {
     SET_USERINFO,
     SET_AUTHUSER,
     SET_ISLOADING,
     SET_AUTHFUNCTIONS,
 } from '../constants/action-types'
-// get store initial state to put on reducer
+
+// Get store initial state to put on reducer.
 import InitialState from '../store-initial-state'
 
-// auth reducer
+// Root reducer.
 function rootReducer(state = InitialState, action: AnyAction) {
     switch (action.type) {
         //// AUTH SECTION
@@ -40,7 +42,7 @@ function rootReducer(state = InitialState, action: AnyAction) {
                 },
             }
             break
-        ////
+        //// USER SECTION.
         case SET_USERINFO:
             return { ...state, user: action.payload }
             break

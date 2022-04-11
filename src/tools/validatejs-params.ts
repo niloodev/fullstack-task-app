@@ -1,5 +1,5 @@
 const validateParams = {
-    // password have to contain a minimun of 3 characters
+    // User have to contain a minimum of 3 characters, and can only contains a-z and 0-9.
     _user: {
         length: {
             minimum: 3,
@@ -11,7 +11,7 @@ const validateParams = {
             message: 'Can only contain a-z and 0-9',
         },
     },
-    // email have the condition of being in email format example@example.exa
+    // Email have the condition of being in email format. (example@example.exa).
     _email: {
         length: {
             minimum: 1,
@@ -21,7 +21,7 @@ const validateParams = {
             message: 'Insert a valid e-mail.',
         },
     },
-    // password have to contain a minimun of 3 characters
+    // Password have to contain a minimum of 6 characters.
     _password: {
         length: {
             minimum: 3,

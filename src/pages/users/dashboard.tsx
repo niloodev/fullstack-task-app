@@ -1,23 +1,23 @@
-///////////////////////////////////// dashboard
+// Dashboard page.
 
-// react import
+// React import.
 import React from 'react'
 
-// import components from app-components, made by framer-motion, material-ui and styled components.
+// Import dashboard components.
 import {
     DashboardMain,
-    TaskList,
     ListDisplay,
 } from '../../styles/styled-components/dashboard-main-components'
+import TaskList from '../../styles/styled-components/dashboard-task-components'
 import SideBar from '../../styles/styled-components/dashboard-side-components'
 
-// head from next.js
+// Head from Next.
 import Head from 'next/head'
 
-// get wrapper to protect route
+// Get wrapper to protect route.
 import RouteProtectWrapper from '../../tools/route-protect-wrapper'
 
-// page component, type ranks as React.FunctionalComponent (React.FC)
+// Page component.
 const Dashboard = () => {
     return (
         <DashboardMain
@@ -25,7 +25,7 @@ const Dashboard = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
         >
-            {/* head component, makes easy to search engines to encounter and organize this app's pages */}
+            {/* Head component, makes easy to search engines to encounter and organize this app's pages. */}
             <Head>
                 <title>Dashboard | niloodev</title>
 
@@ -43,6 +43,7 @@ const Dashboard = () => {
     )
 }
 
+// Route protection.
 const DashboardProtectWrapper = () => (
     <RouteProtectWrapper ifAuthUser="unlogged" redirect="/auth/login">
         <Dashboard />

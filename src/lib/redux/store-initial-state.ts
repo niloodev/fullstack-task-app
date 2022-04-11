@@ -1,4 +1,4 @@
-// initial state
+// 🐸: The default state of application and its type declarations.
 export default {
     auth: {
         authUser: 'waiting',
@@ -21,6 +21,7 @@ export default {
     },
 }
 
+// Main type.
 export interface InitialStateType {
     auth: {
         authUser: FilterAuth | string | null
@@ -37,6 +38,7 @@ export interface InitialStateType {
     user: FilterUser
 }
 
+// Nested types.
 export interface FilterAuth {
     uid: string
     email: string | null

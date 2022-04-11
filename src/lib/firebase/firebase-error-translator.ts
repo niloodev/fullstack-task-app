@@ -1,6 +1,6 @@
-// this 'en' translation of the error codes was cloned from
+// 🐸: This 'en' translation of the error codes was cloned from:
 // https://github.com/JebBarbas/firebase-error-translator/blob/main/src/languages/en.ts
-// its a very good framework that translate the codes to many languages - including portuguese (pt and pt-br)
+// Its a very good framework that translate the codes to many languages - including portuguese (pt and pt-br)
 // and spanish.
 
 const firebaseErrors = {

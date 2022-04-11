@@ -1,16 +1,16 @@
-///////////////////////////////////// login page
+// Login page.
 
-// react import
+// React import.
 import React, { useState } from 'react'
 
-// import auth state from redux
+// Import redux hook to access application global state.
 import { useSelector } from 'react-redux'
 
-// validate.js to validate inputs and model of validation
+// Import validateParams and validate function, to make values validation.
 import { validate } from 'validate.js'
 import validateParams from '../../tools/validatejs-params'
 
-// import components from app-components, made by framer-motion, material-ui and styled components.
+// Import authentication components.
 import {
     HundredPercentAlign,
     AuthBox,
@@ -21,23 +21,23 @@ import {
     AuthCredits,
 } from '../../styles/styled-components/auth-components'
 
-// head from next.js
+// Head and Link from Next.
 import Head from 'next/head'
 import Link from 'next/link'
 
-// get wrapper to protect route
+// Get wrapper to protect this route.
 import RouteProtectWrapper from '../../tools/route-protect-wrapper'
 
-// page component, type ranks as React.FunctionalComponent (React.FC)
+// Page component.
 const Login = () => {
-    // state of input values (controlled component) and errors log.
+    // State of input values and its errors state.
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
 
     const [passError, setPassError] = useState<string | undefined>()
     const [emailError, setEmailError] = useState<string | undefined>()
 
-    // auth state
+    // Auth state from application global state.
     const { isLoading, signInEmailAndPassword, signInWithGithub } = useSelector(
         state => state.auth
     )
@@ -49,7 +49,7 @@ const Login = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
         >
-            {/* head component, makes easy to search engines to encounter and organize this app's pages */}
+            {/* Head component, makes easy to search engines to encounter and organize this app's pages. */}
             <Head>
                 <title>Log-in | niloodev</title>
 
@@ -60,19 +60,19 @@ const Login = () => {
                 />
             </Head>
 
-            {/* form box */}
+            {/* Form box. */}
             <AuthBox
                 initial={{ transform: 'scale(0.6, 0.6)' }}
                 animate={{ transform: 'scale(1, 1)' }}
                 exit={{ transform: 'scale(0.6, 0.6)' }}
             >
-                {/* auth icon */}
+                {/* Title. */}
                 <AuthP>{'<TaskApp />'}</AuthP>
 
-                {/* auth separator */}
+                {/* Separator.*/}
                 <AuthSeparator />
 
-                {/* auth inputs | user and password */}
+                {/* User and password inputs. */}
                 <AuthInput
                     label="E-mail"
                     disabled={isLoading}
@@ -85,7 +85,7 @@ const Login = () => {
                     }
                     // error exibition properties
                     error={emailError != undefined ? true : false}
-                    errorlog={emailError != undefined ? emailError : ''}
+                    errorLog={emailError != undefined ? emailError : ''}
                 />
 
                 <AuthInput
@@ -101,14 +101,14 @@ const Login = () => {
                     }
                     // error exibition properties
                     error={passError != undefined ? true : false}
-                    errorlog={passError != undefined ? passError : ''}
+                    errorLog={passError != undefined ? passError : ''}
                 />
 
-                {/* login button */}
+                {/* Login button. */}
                 <AuthButton
                     padding="15px"
                     disabled={isLoading}
-                    buttontype={!isLoading ? 'login' : 'loading'}
+                    buttonType={!isLoading ? 'login' : 'loading'}
                     onClick={() => {
                         const errors = validate(
                             {
@@ -138,19 +138,19 @@ const Login = () => {
                     }}
                 />
 
-                {/* github login button */}
+                {/* Github login button. */}
                 <AuthButton
                     disabled={isLoading}
-                    buttontype="github"
+                    buttonType="github"
                     onClick={signInWithGithub}
                 />
 
-                {/* register button */}
+                {/* Register button. */}
                 <Link passHref href="/auth/register">
                     <AuthButton disabled={isLoading}>REGISTER</AuthButton>
                 </Link>
 
-                {/* credits */}
+                {/* Credits. */}
                 <AuthCredits>
                     created by&nbsp;
                     <Link href="https://www.github.com/niloodev">niloodev</Link>
@@ -160,6 +160,7 @@ const Login = () => {
     )
 }
 
+// Wrap the page here.
 const LoginProtectWrapper = () => (
     <RouteProtectWrapper ifAuthUser="logged" redirect="/users/dashboard">
         <Login />

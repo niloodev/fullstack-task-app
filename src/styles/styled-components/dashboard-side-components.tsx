@@ -1,9 +1,13 @@
-// import react
+// React import.
 import React, { useState } from 'react'
 
-// framer-motion integration with styled-components + material.ui
+// Framer Motion import.
 import { HTMLMotionProps, motion } from 'framer-motion'
 
+// Import Styled Components.
+import Styled from 'styled-components'
+
+// Import some Material UI components.
 import {
     List,
     ListItemButton,
@@ -18,16 +22,12 @@ import {
 } from '@mui/material'
 import * as Icons from '@mui/icons-material'
 import ToggleIcon from 'material-ui-toggle-icon'
+type IconsType = typeof Icons // Get icons type.
 
-type IconsType = typeof Icons
-
-// import app state
+// Import application global state. (Hook from Redux)
 import { useSelector } from 'react-redux'
 
-// import styled components
-import Styled from 'styled-components'
-
-///// search button component
+// Search component.
 const SearchButtonDiv = Styled(motion.div)`
     border-radius: 10px; display: flex; justify-content: flex-start; align-items: center;
     padding: 5px; overflow: hidden;
@@ -40,7 +40,7 @@ const SearchButtonDiv = Styled(motion.div)`
 
     &[data-opened = "isopen"] {
         width: calc(100% - 10px);
-        background: ${props => props.theme.palette.primary.main};
+        background: var(--color-primary);
     }
 `
 const SearchButton = ({
@@ -50,6 +50,7 @@ const SearchButton = ({
     motionProps?: HTMLMotionProps<'div'>
     iconProps?: SvgIconProps
 }) => {
+    // Set states of functional component.
     const [toggle, setToggle] = useState(false)
     const SearchIcon = Icons['Search']
     const SearchOff = Icons['SearchOff']
@@ -92,7 +93,7 @@ const SearchButton = ({
     )
 }
 
-///// show list button
+// List template button.
 const ShowListButton = ({
     iconType = 'ListAlt',
     iconColor = 'primary.main',
@@ -125,14 +126,14 @@ const ShowListButton = ({
     )
 }
 
-///// sidebar component
+// SideBar component.
 const SideBarStyled = Styled(motion.div)`
     border-radius: 10px;
     padding: 10px;
     grid-area: side;
     min-width: 230px;
 
-    background-color: ${props => props.theme.palette.secondary.main};
+    background-color: var(--color-secondary);
 
     display: flex;
     flex-flow: column;
@@ -147,6 +148,7 @@ const SideBarStyled = Styled(motion.div)`
     }
 `
 export default function SideBar() {
+    // Get "signOut" function and user data from global state.
     const signOut = useSelector(state => state.auth.signOut)
     const userData = useSelector(state => state.user)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)

@@ -1,21 +1,20 @@
 /* eslint @typescript-eslint/no-explicit-any: "off" */
 /* eslint @typescript-eslint/no-unused-vars: "off" */
 
-// import react
+// Import React.
 import React, { Ref } from 'react'
 
-// framer-motion integration with styled-components + material.ui
+// Framer Motion and Styled Components import.
 import { motion } from 'framer-motion'
 import Styled from 'styled-components'
 
-// some components | icons
+// Material UI imports.
 import {
     CodeOutlined as UserIcon,
     GitHub as GitHubIcon,
     Check as CheckIcon,
 } from '@mui/icons-material'
 
-// solid components
 import {
     Button,
     TextField,
@@ -24,7 +23,7 @@ import {
     TextFieldProps,
 } from '@mui/material'
 
-// div that centers anything inside it
+// DIV that centers everything inside it.
 export const HundredPercentAlign = Styled(motion.div)`
     position: relative;
     width: 100%; height: 100%;
@@ -33,7 +32,7 @@ export const HundredPercentAlign = Styled(motion.div)`
     overflow: hidden;
 `
 
-// auth-box its basically the container of the form
+// As the name says, is the authentication wrapper that contains the formulary of login and register pages.
 export const AuthBox = Styled(motion.div)`
     position: absolute;
     min-width: 300px;
@@ -44,13 +43,13 @@ export const AuthBox = Styled(motion.div)`
     gap: 10px;
     padding: 12px;
 
-    background-color: ${props => props.theme.palette.secondary.main};
+    background-color: var(--color-secondary);
     border-radius: 5%;
 
     box-shadow: 0px 0px 20px rgb(0, 0, 0, 0.5);
 
-    border-bottom: 6px solid ${props => props.theme.palette.warning.main};
-    border-left: 6px solid ${props => props.theme.palette.warning.main};
+    border-bottom: 6px solid var(--color-warning);
+    border-left: 6px solid var(--color-warning);
 
     @media (max-width: 450px) {
         width: calc(100% - 20px);
@@ -64,27 +63,27 @@ export const AuthBox = Styled(motion.div)`
     }
 `
 
-// auth-icon is the css settings of the user-icon; used in login and register page
+// This is the standard auth icon.
 export const AuthIcon = (): JSX.Element => (
     <UserIcon color="warning" style={{ fontSize: '40px' }} />
 )
 
+// Just a color line.
 export const AuthSeparator = Styled.div`
     width: 90%;
     height: 2.5px;
     border-radius: 100%;
 
-    background-color: ${props => props.theme.palette.warning.main};
+    background-color: var(--color-warning);
 `
 
-// auth-input is the material-ui input with some definitions, made it here because of padronization
+// 🐸: AuthInput component is the Material UI input with some customizations.
 const CapsuleDiv = Styled.div`
     width: 90%;
     position: relative;
 `
-
 const LabelError = Styled.div`
-    color: ${props => props.theme.palette.error.main};
+    color: var(--color-error);
     bottom: 0px;
     position: absolute;
     display: flex; justify-content: center; align-items: center;
@@ -92,10 +91,10 @@ const LabelError = Styled.div`
     width: 100%;
 `
 export const AuthInput = ({
-    errorlog = '',
+    errorLog = '',
     ...props
 }: {
-    errorlog: string
+    errorLog: string
 } & TextFieldProps): JSX.Element => {
     return (
         <CapsuleDiv>
@@ -105,14 +104,14 @@ export const AuthInput = ({
                 color="warning"
                 style={{ width: '100%' }}
             />
-            <LabelError>{errorlog}</LabelError>
+            <LabelError>{errorLog}</LabelError>
         </CapsuleDiv>
     )
 }
 
-// paragraph of the forms
+// Basic text of forms.
 export const AuthP = Styled.h1`
-    color: ${props => props.theme.palette.warning.main};
+    color: var(--color-warning);
     font-weight: bold;
     text-align: center;
     font-size: 20px;
@@ -121,7 +120,7 @@ export const AuthP = Styled.h1`
     margin: 0; padding: 0;
 `
 
-// credits
+// Credits.
 export const AuthCredits = Styled.div`
     position: absolute;
     width: 100%;
@@ -129,10 +128,10 @@ export const AuthCredits = Styled.div`
 
     font-size: 10px;
     bottom: 10px;
-    color: ${props => props.theme.palette.warning.main};
+    color: var(--color-warning);
 
     a {
-        color: ${props => props.theme.palette.warning.main};
+        color: var(--color-warning);
     }
 
     a:hover {
@@ -140,23 +139,23 @@ export const AuthCredits = Styled.div`
     }
 `
 
-// customizable button that fits the application design, a good example of material-ui + Styled components integration.
+// 🐸: A custom button that fits the application design, a good example of the Styled Components + Material UI
+// integration, it is forwarding the reference because of the Link component of Next.
 const AuthButton_ = Styled(Button)`
         width: 90%;
         font-size: 14px !important;
 `
 const AuthSpan = Styled.span`
-        color: ${props => props.theme.palette.secondary.main};
+        color: var(--color-secondary);
 `
-// here we defined some default values to custom props, and then the optional type of then (? indicator)
 export const AuthButton = React.forwardRef(function AuthButton(
     {
         padding = '5px',
-        buttontype = undefined,
+        buttonType = undefined,
         ...props
     }: {
         padding?: string | undefined
-        buttontype?: 'register' | 'login' | 'github' | 'loading' | undefined
+        buttonType?: 'register' | 'login' | 'github' | 'loading' | undefined
     } & ButtonProps,
     ref: Ref<any>
 ): JSX.Element {
@@ -170,11 +169,11 @@ export const AuthButton = React.forwardRef(function AuthButton(
                 paddingBottom: padding,
             }}
         >
-            {buttontype == 'login' || buttontype == 'register' ? (
+            {buttonType == 'login' || buttonType == 'register' ? (
                 <CheckIcon color="secondary" />
-            ) : buttontype == 'github' ? (
+            ) : buttonType == 'github' ? (
                 <GitHubIcon color="secondary" />
-            ) : buttontype == 'loading' ? (
+            ) : buttonType == 'loading' ? (
                 <CircularProgress color="secondary" size="1.5rem" />
             ) : (
                 <AuthSpan>{props.children}</AuthSpan>

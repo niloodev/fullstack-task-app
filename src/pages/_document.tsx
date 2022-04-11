@@ -1,6 +1,6 @@
-// this code was copied from styled-components guide to next.js implementation.
-// here: https://github.com/vercel/next.js/blob/canary/examples/with-styled-components-babel/pages/_document.js
-// basically, it implements the stilization before the rendering of the page - soo the backend sends the content
+// 🐸: This code was cloned from Styled Components guide to Next implementation.
+// https://github.com/vercel/next.js/blob/canary/examples/with-styled-components-babel/pages/_document.js
+// Basically, it implements the stilization before the rendering of the page - so the backend sends the content
 // already styled to the frontend.
 
 import React from 'react'

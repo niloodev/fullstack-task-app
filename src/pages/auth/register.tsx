@@ -1,13 +1,13 @@
-///////////////////////////////////// register page
+// Register page.
 
-// react import
+// React import.
 import React, { useState } from 'react'
 
-// validate.js to validate inputs and model of validation
+// Validate.js to validate inputs and model of validation.
 import { validate } from 'validate.js'
 import validateParams from '../../tools/validatejs-params'
 
-// import components from app-components, made by framer-motion, material-ui and styled components.
+// Import authentication components.
 import {
     HundredPercentAlign,
     AuthBox,
@@ -16,19 +16,19 @@ import {
     AuthButton,
 } from '../../styles/styled-components/auth-components'
 
-// head from next.js
+// Head and Link from Next.
 import Head from 'next/head'
 import Link from 'next/link'
 
-// get auth from redux
+// Get application global state.
 import { useSelector } from 'react-redux'
 
-// get wrapper to protect route
+// Get wrapper to protect route.
 import RouteProtectWrapper from '../../tools/route-protect-wrapper'
 
-// page component, type ranks as React.FunctionalComponent (React.FC)
+// Page component.
 const Register = () => {
-    // state definition
+    // State definition.
     const [user, setUser] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
@@ -37,7 +37,7 @@ const Register = () => {
     const [passError, setPassError] = useState<string | undefined>()
     const [emailError, setEmailError] = useState<string | undefined>()
 
-    // auth state
+    // Get auth state.
     const { isLoading, createUserWithEmailAndPassword } = useSelector(
         state => state.auth
     )
@@ -49,7 +49,7 @@ const Register = () => {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
         >
-            {/* head component, makes easy to search engines to encounter and organize this app's pages */}
+            {/* Head component, makes easy to search engines to encounter and organize this app's pages. */}
             <Head>
                 <title>Sign-in | niloodev</title>
 
@@ -60,16 +60,16 @@ const Register = () => {
                 />
             </Head>
 
-            {/* form box */}
+            {/* Form box. */}
             <AuthBox
                 initial={{ transform: 'scale(0.6, 0.6)' }}
                 animate={{ transform: 'scale(1, 1)' }}
                 exit={{ transform: 'scale(0.6, 0.6)' }}
             >
-                {/* auth title */}
+                {/* Title. */}
                 <AuthP>SIGN-IN</AuthP>
 
-                {/* auth inputs | user, email and password */}
+                {/* Auth user, email and password inputs. */}
                 <AuthInput
                     label="User"
                     disabled={isLoading}
@@ -80,9 +80,9 @@ const Register = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setUser(e.target.value)
                     }
-                    // error exibition properties
+                    // Error display properties.
                     error={userError != undefined ? true : false}
-                    errorlog={userError != undefined ? userError : ''}
+                    errorLog={userError != undefined ? userError : ''}
                 />
 
                 <AuthInput
@@ -96,9 +96,9 @@ const Register = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setEmail(e.target.value)
                     }
-                    // error exibition properties
+                    // Error display properties.
                     error={emailError != undefined ? true : false}
-                    errorlog={emailError != undefined ? emailError : ''}
+                    errorLog={emailError != undefined ? emailError : ''}
                 />
 
                 <AuthInput
@@ -112,15 +112,15 @@ const Register = () => {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         setPassword(e.target.value)
                     }
-                    // error exibition properties
+                    // Error display properties.
                     error={passError != undefined ? true : false}
-                    errorlog={passError != undefined ? passError : ''}
+                    errorLog={passError != undefined ? passError : ''}
                 />
 
-                {/* register button */}
+                {/* Register button. */}
                 <AuthButton
                     disabled={isLoading}
-                    buttontype={!isLoading ? 'register' : 'loading'}
+                    buttonType={!isLoading ? 'register' : 'loading'}
                     onClick={() => {
                         const errors = validate(
                             {
@@ -161,7 +161,7 @@ const Register = () => {
                     }}
                 />
 
-                {/* back button */}
+                {/* Back button. */}
                 <Link passHref href="/auth/login">
                     <AuthButton disabled={isLoading}>BACK</AuthButton>
                 </Link>
@@ -170,6 +170,7 @@ const Register = () => {
     )
 }
 
+// Route protect wrapper.
 const RegisterProtectWrapper = () => (
     <RouteProtectWrapper ifAuthUser="logged" redirect="/users/dashboard">
         <Register />

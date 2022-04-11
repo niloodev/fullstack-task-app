@@ -1,11 +1,11 @@
-// import react
+// React import.
 import React from 'react'
 
-// framer-motion integration with styled-components + material.ui
-import { HTMLMotionProps, motion } from 'framer-motion'
+// Framer Motion and Styled components import.
+import { motion } from 'framer-motion'
 import Styled from 'styled-components'
 
-// dashboard main is the parent div to all others in dashboard
+// Dashboard main is the parent component to all others in dashboard.
 export const DashboardMain = Styled(motion.main)`
     position: relative;
     width: calc(100% - 120px);
@@ -33,33 +33,12 @@ export const DashboardMain = Styled(motion.main)`
     }
 `
 
-//// taskList will render all tasks provided in props
-const TaskListDiv = Styled(motion.div)`
-    display: flex;
-    flex-flow: column;
-    gap: 5px; padding: 5px;
-    border-radius: 5px;
-    grid-area: task;
-
-    overflow-x: hidden;
-    overflow-y: scroll;
-    background-color: ${props => props.theme.palette.secondary.main};
-`
-
-export const TaskList = ({
-    tasklist = [],
-    ...props
-}: { tasklist?: Array<string | undefined> } & HTMLMotionProps<'div'>) => {
-    return <TaskListDiv {...props}></TaskListDiv>
-}
-
-//// will display the list name, and some date info
+// Will display the list name, and some date information.
 const ListDisplayStyled = Styled(motion.div)`
     border-radius: 5px;
     grid-area: display;
-    background-color: ${props => props.theme.palette.warning.main};
+    background-color: var(--color-warning);
 `
-
 export const ListDisplay = () => {
     return <ListDisplayStyled></ListDisplayStyled>
 }
