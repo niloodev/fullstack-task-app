@@ -23,3 +23,5 @@ export const GithubProvider = new GithubAuthProvider()
 export const initializedApp: FirebaseApp = initializeApp(firebaseConfig)
 export const initializedDatabase: Database = getDatabase(initializedApp)
 export const initializedAuth: Auth = getAuth(initializedApp)
+
+export const reCaptchaKey = '6Lfq3D0fAAAAAMa23A40f4Ji2wg9ASEd9Zc7mXCl'

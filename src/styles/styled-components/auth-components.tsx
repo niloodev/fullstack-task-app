@@ -6,7 +6,7 @@ import React, { Ref } from 'react'
 
 // Framer Motion and Styled Components import.
 import { motion } from 'framer-motion'
-import Styled from 'styled-components'
+import styled from 'styled-components'
 
 // Material UI imports.
 import {
@@ -24,21 +24,26 @@ import {
 } from '@mui/material'
 
 // DIV that centers everything inside it.
-export const HundredPercentAlign = Styled(motion.div)`
+export const HundredPercentAlign = styled(motion.div)`
     position: relative;
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
 
-    display: flex; justify-content: center; align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     overflow: hidden;
 `
 
 // As the name says, is the authentication wrapper that contains the formulary of login and register pages.
-export const AuthBox = Styled(motion.div)`
+export const AuthBox = styled(motion.div)`
     position: absolute;
     min-width: 300px;
     min-height: 400px;
 
-    display: flex; justify-content: center; align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex-flow: column;
     gap: 10px;
     padding: 12px;
@@ -55,7 +60,8 @@ export const AuthBox = Styled(motion.div)`
         width: calc(100% - 20px);
         height: calc(100% - 20px);
 
-        min-width: auto; min-height: auto;
+        min-width: auto;
+        min-height: auto;
 
         margin: 10px;
         padding: 0;
@@ -69,7 +75,7 @@ export const AuthIcon = (): JSX.Element => (
 )
 
 // Just a color line.
-export const AuthSeparator = Styled.div`
+export const AuthSeparator = styled.div`
     width: 90%;
     height: 2.5px;
     border-radius: 100%;
@@ -78,16 +84,18 @@ export const AuthSeparator = Styled.div`
 `
 
 // 🐸: AuthInput component is the Material UI input with some customizations.
-const CapsuleDiv = Styled.div`
+const CapsuleDiv = styled.div`
     width: 90%;
     position: relative;
 `
-const LabelError = Styled.div`
+const LabelError = styled.div`
     color: var(--color-error);
     bottom: 0px;
     position: absolute;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 12px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
     width: 100%;
 `
 export const AuthInput = ({
@@ -110,21 +118,23 @@ export const AuthInput = ({
 }
 
 // Basic text of forms.
-export const AuthP = Styled.h1`
+export const AuthP = styled.h1`
     color: var(--color-warning);
     font-weight: bold;
     text-align: center;
     font-size: 20px;
     letter-spacing: 2px;
 
-    margin: 0; padding: 0;
+    margin: 0;
+    padding: 0;
 `
 
 // Credits.
-export const AuthCredits = Styled.div`
+export const AuthCredits = styled.div`
     position: absolute;
     width: 100%;
-    display: inline-block; text-align: center;
+    display: inline-block;
+    text-align: center;
 
     font-size: 10px;
     bottom: 10px;
@@ -141,12 +151,12 @@ export const AuthCredits = Styled.div`
 
 // 🐸: A custom button that fits the application design, a good example of the Styled Components + Material UI
 // integration, it is forwarding the reference because of the Link component of Next.
-const AuthButton_ = Styled(Button)`
-        width: 90%;
-        font-size: 14px !important;
+const AuthButton_ = styled(Button)`
+    width: 90%;
+    font-size: 14px !important;
 `
-const AuthSpan = Styled.span`
-        color: var(--color-secondary);
+const AuthSpan = styled.span`
+    color: var(--color-secondary);
 `
 export const AuthButton = React.forwardRef(function AuthButton(
     {

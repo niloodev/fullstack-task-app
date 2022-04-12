@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { HTMLMotionProps, motion } from 'framer-motion'
 
 // Import Styled Components.
-import Styled from 'styled-components'
+import styled from 'styled-components'
 
 // Import some Material UI components.
 import {
@@ -28,17 +28,22 @@ type IconsType = typeof Icons // Get icons type.
 import { useSelector } from 'react-redux'
 
 // Search component.
-const SearchButtonDiv = Styled(motion.div)`
-    border-radius: 10px; display: flex; justify-content: flex-start; align-items: center;
-    padding: 5px; overflow: hidden;
+const SearchButtonDiv = styled(motion.div)`
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 5px;
+    overflow: hidden;
     transition: all 0.2s ease;
 
-    position: absolute; right: 0px;
-    
+    position: absolute;
+    right: 0px;
+
     width: 60px;
     background: none;
 
-    &[data-opened = "isopen"] {
+    &[data-opened='isopen'] {
         width: calc(100% - 10px);
         background: var(--color-primary);
     }
@@ -76,7 +81,7 @@ const SearchButton = ({
                 color={!toggle ? 'warning' : 'secondary'}
                 sx={{
                     position: 'absolute',
-                    right: '15px',
+                    right: '18.5px',
                 }}
                 onClick={() => {
                     if (toggle) setToggle(false)
@@ -90,6 +95,43 @@ const SearchButton = ({
                 />
             </IconButton>
         </SearchButtonDiv>
+    )
+}
+
+// Toggle button.
+const ToggleButtonStyled = styled(motion.div)`
+    display: none;
+    position: absolute;
+
+    @media (max-width: 600px) {
+        display: flex;
+    }
+`
+const ToggleButton = ({
+    toggle,
+    ...props
+}: { toggle: boolean } & HTMLMotionProps<'div'>) => {
+    const Icon = toggle ? Icons['Menu'] : Icons['Close']
+    return (
+        <ToggleButtonStyled
+            {...props}
+            layout
+            style={
+                toggle
+                    ? {
+                          top: '5px',
+                          right: '-45px',
+                      }
+                    : {
+                          bottom: '15px',
+                          right: '15px',
+                      }
+            }
+        >
+            <IconButton color={toggle ? 'secondary' : 'error'}>
+                <Icon />
+            </IconButton>
+        </ToggleButtonStyled>
     )
 }
 
@@ -127,7 +169,7 @@ const ShowListButton = ({
 }
 
 // SideBar component.
-const SideBarStyled = Styled(motion.div)`
+const SideBarStyled = styled(motion.div)`
     border-radius: 10px;
     padding: 10px;
     grid-area: side;
@@ -138,13 +180,20 @@ const SideBarStyled = Styled(motion.div)`
     display: flex;
     flex-flow: column;
 
-    @media(max-width: 600px) {
+    @media (max-width: 600px) {
         z-index: 2;
         border-radius: 0px;
         position: absolute;
 
         width: calc(100% - 20px);
         height: calc(100% - 20px);
+
+        transition: all 0.2s ease;
+        transform: translateX(0%);
+
+        &[data-toggle='true'] {
+            transform: translateX(-100%);
+        }
     }
 `
 export default function SideBar() {
@@ -153,8 +202,17 @@ export default function SideBar() {
     const userData = useSelector(state => state.user)
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
+    const [toggle, setToggle] = useState(true)
+
     return (
-        <SideBarStyled>
+        <SideBarStyled data-toggle={toggle}>
+            <ToggleButton
+                toggle={toggle}
+                onClick={() => {
+                    if (toggle) setToggle(false)
+                    else setToggle(true)
+                }}
+            />
             <List
                 sx={{
                     gap: '10px',

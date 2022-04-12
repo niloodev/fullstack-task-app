@@ -3,13 +3,14 @@ import React from 'react'
 
 // Framer Motion and Styled components import.
 import { motion, HTMLMotionProps } from 'framer-motion'
-import Styled from 'styled-components'
+import styled from 'styled-components'
 
 // Will render all tasks provided in props.
-const TaskListDiv = Styled(motion.div)`
+const TaskListDiv = styled(motion.div)`
     display: flex;
     flex-flow: column;
-    gap: 5px; padding: 5px;
+    gap: 5px;
+    padding: 5px;
     border-radius: 5px;
     grid-area: task;
 

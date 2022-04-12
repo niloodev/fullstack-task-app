@@ -12,6 +12,7 @@ import {
     initializedApp,
     initializedAuth as AuthObj,
     initializedDatabase as DataObj,
+    reCaptchaKey,
     GithubProvider,
 } from './firebase-config'
 
@@ -59,15 +60,10 @@ export default function FirebaseAuth() {
     // On mount (client-side) sets AppCheck from Firebase.
     useEffect(() => {
         initializeAppCheck(initializedApp, {
-            provider: new ReCaptchaV3Provider(
-                '6Lfq3D0fAAAAAMa23A40f4Ji2wg9ASEd9Zc7mXCl'
-            ),
+            provider: new ReCaptchaV3Provider(reCaptchaKey),
             isTokenAutoRefreshEnabled: true,
         })
-        return () => {
-            return
-        }
-    })
+    }, [])
 
     // On mount, create functions and dispatch it to Redux.
     useEffect(() => {
