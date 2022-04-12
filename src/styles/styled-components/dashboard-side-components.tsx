@@ -43,7 +43,7 @@ const SearchButtonDiv = styled(motion.div)`
     width: 60px;
     background: none;
 
-    &[data-opened='isopen'] {
+    &[data-opened='true'] {
         width: calc(100% - 10px);
         background: var(--color-primary);
     }
@@ -61,10 +61,7 @@ const SearchButton = ({
     const SearchOff = Icons['SearchOff']
 
     return (
-        <SearchButtonDiv
-            {...motionProps}
-            data-opened={toggle ? 'isopen' : 'isntopen'}
-        >
+        <SearchButtonDiv {...motionProps} data-opened={toggle}>
             <TextField
                 label="Search"
                 variant="outlined"
@@ -222,14 +219,13 @@ export default function SideBar() {
             >
                 <ListSubheader
                     sx={{
-                        gap: '10px',
+                        gap: '5px',
                         bgcolor: 'secondary.main',
                         display: 'flex',
                         flexFlow: 'row',
                         flexWrap: 'no-wrap',
                         alignItems: 'center',
-                        paddingTop: '10px',
-                        paddingBottom: '10px',
+                        padding: '7px',
                     }}
                 >
                     <IconButton
@@ -270,8 +266,12 @@ export default function SideBar() {
 
                 <Divider />
 
-                <ShowListButton iconType="WbSunny">Today</ShowListButton>
-                <ShowListButton iconType="Star">Favorite</ShowListButton>
+                <ShowListButton iconType="LightModeOutlined">
+                    Today
+                </ShowListButton>
+                <ShowListButton iconType="FavoriteBorder">
+                    Favorite
+                </ShowListButton>
                 <ShowListButton iconType="CalendarMonth">
                     Planned
                 </ShowListButton>

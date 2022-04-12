@@ -5,6 +5,9 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
+// Moment import. (Date management)
+import moment from 'moment'
+
 // Dashboard main is the parent component to all others in dashboard.
 export const DashboardMain = styled(motion.main)`
     position: relative;
@@ -37,10 +40,37 @@ export const DashboardMain = styled(motion.main)`
 
 // Will display the list name, and some date information.
 const ListDisplayStyled = styled(motion.div)`
+    position: relative;
     border-radius: 5px;
     grid-area: display;
-    background-color: var(--color-warning);
+    background-image: var(--gradient-primary);
+
+    display: flex;
+    align-items: center;
+    padding: 0px 40px;
+
+    @media (max-width: 600px) {
+        justify-content: center;
+    }
+`
+const ListName = styled(motion.h1)`
+    font-size: 45px;
+    color: var(--color-secondary);
+`
+const Date = styled(motion.span)`
+    position: absolute;
+    bottom: 15px;
+    color: var(--color-secondary);
+
+    @media (min-width: 600px) {
+        padding-left: 5px;
+    }
 `
 export const ListDisplay = () => {
-    return <ListDisplayStyled></ListDisplayStyled>
+    return (
+        <ListDisplayStyled>
+            <ListName>Today</ListName>
+            <Date>{moment().format('dddd, MMMM Do')}</Date>
+        </ListDisplayStyled>
+    )
 }

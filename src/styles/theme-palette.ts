@@ -19,7 +19,7 @@ const themePalette = {
         },
     },
     typography: {
-        fontFamily: `"Work Sans", sans-serif`,
+        fontFamily: `"Exo", sans-serif`,
     },
 }
 

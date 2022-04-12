@@ -25,6 +25,7 @@
     "firebase": "^9.6.10",
     "framer-motion": "^6.2.8",
     "material-ui-toggle-icon": "^1.1.2",
+    "moment": "^2.29.2",
     "next": "12.1.1",
     "next-redux-wrapper": "^7.0.5",
     "notistack": "^2.0.3",
