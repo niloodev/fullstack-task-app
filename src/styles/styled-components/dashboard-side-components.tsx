@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // React import.
 import React, { useState } from 'react'
 
@@ -6,6 +8,12 @@ import { HTMLMotionProps, motion } from 'framer-motion'
 
 // Import Styled Components.
 import styled from 'styled-components'
+
+// Redux imports.
+import { useSelector, useDispatch } from 'react-redux'
+
+// Get app functionalities.
+import { signOut } from '../../lib/redux/actions/action'
 
 // Import some Material UI components.
 import {
@@ -19,13 +27,11 @@ import {
     Divider,
     IconButton,
     TextField,
+    ListItemButtonProps,
 } from '@mui/material'
 import * as Icons from '@mui/icons-material'
 import ToggleIcon from 'material-ui-toggle-icon'
 type IconsType = typeof Icons // Get icons type.
-
-// Import application global state. (Hook from Redux)
-import { useSelector } from 'react-redux'
 
 // Search component.
 const SearchButtonDiv = styled(motion.div)`
@@ -100,7 +106,7 @@ const ToggleButtonStyled = styled(motion.div)`
     display: none;
     position: absolute;
 
-    @media (max-width: 600px) {
+    @media (max-width: 800px) {
         display: flex;
     }
 `
@@ -138,16 +144,13 @@ const ShowListButton = ({
     iconColor = 'primary.main',
     textColor = 'primary.main',
     children = 'template button',
-    onClick_ = () => {
-        return
-    },
+    ...props
 }: {
     iconType?: keyof IconsType
     iconColor?: string
     textColor?: string
     children: string
-    onClick_?: () => void
-}) => {
+} & ListItemButtonProps) => {
     const Icon = Icons[iconType]
     return (
         <ListItemButton
@@ -157,7 +160,7 @@ const ShowListButton = ({
                 paddingTop: '15px',
                 paddingBottom: '15px',
             }}
-            onClick={onClick_}
+            {...props}
         >
             <Icon sx={{ color: iconColor }} />
             {children}
@@ -177,7 +180,7 @@ const SideBarStyled = styled(motion.div)`
     display: flex;
     flex-flow: column;
 
-    @media (max-width: 600px) {
+    @media (max-width: 800px) {
         z-index: 2;
         border-radius: 0px;
         position: absolute;
@@ -194,12 +197,15 @@ const SideBarStyled = styled(motion.div)`
     }
 `
 export default function SideBar() {
-    // Get "signOut" function and user data from global state.
-    const signOut = useSelector(state => state.auth.signOut)
+    // Get user data from global state.
     const userData = useSelector(state => state.user)
+    // Anchor for Material UI Menu component.
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
+    // For mobile toggle bar.
     const [toggle, setToggle] = useState(true)
+    // Redux hook.
+    const dispatch = useDispatch()
+    const tasksList: any = useSelector(state => state.user.tasksList)
 
     return (
         <SideBarStyled data-toggle={toggle}>
@@ -252,7 +258,9 @@ export default function SideBar() {
                         }}
                     >
                         <MenuItem
-                            onClick={signOut}
+                            onClick={() => {
+                                dispatch(signOut())
+                            }}
                             sx={{
                                 color: 'error.main',
                             }}
@@ -276,7 +284,23 @@ export default function SideBar() {
                     Planned
                 </ShowListButton>
                 <ShowListButton iconType="HomeOutlined">Tasks</ShowListButton>
+
                 <Divider />
+
+                {tasksList
+                    ? Object.keys(tasksList).map(key => {
+                          return (
+                              <ShowListButton
+                                  key={key}
+                                  iconType={tasksList[key].icon}
+                                  iconColor={tasksList[key].color}
+                              >
+                                  {tasksList[key].title}
+                              </ShowListButton>
+                          )
+                      })
+                    : null}
+
                 <ShowListButton
                     iconType="Add"
                     textColor="warning.main"

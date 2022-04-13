@@ -4,7 +4,13 @@
 import React, { useState } from 'react'
 
 // Import redux hook to access application global state.
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+
+// Get app functionalities.
+import {
+    signInEmailAndPassword,
+    signInWithGithub,
+} from '../../lib/redux/actions/action'
 
 // Import validateParams and validate function, to make values validation.
 import { validate } from 'validate.js'
@@ -37,10 +43,11 @@ const Login = () => {
     const [passError, setPassError] = useState<string | undefined>()
     const [emailError, setEmailError] = useState<string | undefined>()
 
+    // Get Redux dispatch.
+    const dispatch = useDispatch()
+
     // Auth state from application global state.
-    const { isLoading, signInEmailAndPassword, signInWithGithub } = useSelector(
-        state => state.auth
-    )
+    const isLoading = useSelector(state => state.auth.isLoading)
 
     return (
         <HundredPercentAlign
@@ -133,7 +140,7 @@ const Login = () => {
                             setPassError(undefined)
                             setEmailError(undefined)
 
-                            signInEmailAndPassword(email, password)
+                            dispatch(signInEmailAndPassword(email, password))
                         }
                     }}
                 />
@@ -142,7 +149,9 @@ const Login = () => {
                 <AuthButton
                     disabled={isLoading}
                     buttonType="github"
-                    onClick={signInWithGithub}
+                    onClick={() => {
+                        dispatch(signInWithGithub())
+                    }}
                 />
 
                 {/* Register button. */}

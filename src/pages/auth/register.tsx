@@ -7,6 +7,9 @@ import React, { useState } from 'react'
 import { validate } from 'validate.js'
 import validateParams from '../../tools/validatejs-params'
 
+// Get app functionalities.
+import { createUserWithEmailAndPassword } from '../../lib/redux/actions/action'
+
 // Import authentication components.
 import {
     HundredPercentAlign,
@@ -21,7 +24,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 
 // Get application global state.
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 // Get wrapper to protect route.
 import RouteProtectWrapper from '../../tools/route-protect-wrapper'
@@ -38,9 +41,10 @@ const Register = () => {
     const [emailError, setEmailError] = useState<string | undefined>()
 
     // Get auth state.
-    const { isLoading, createUserWithEmailAndPassword } = useSelector(
-        state => state.auth
-    )
+    const isLoading = useSelector(state => state.auth.isLoading)
+
+    // Get dispatch.
+    const dispatch = useDispatch()
 
     return (
         <HundredPercentAlign
@@ -152,10 +156,12 @@ const Register = () => {
                             setPassError(undefined)
                             setEmailError(undefined)
 
-                            createUserWithEmailAndPassword(
-                                email,
-                                password,
-                                user
+                            dispatch(
+                                createUserWithEmailAndPassword(
+                                    email,
+                                    password,
+                                    user
+                                )
                             )
                         }
                     }}

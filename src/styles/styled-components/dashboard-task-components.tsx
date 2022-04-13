@@ -6,12 +6,14 @@ import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
 // Material UI components.
-import { List, ListItem, Divider, Checkbox } from '@mui/material'
+import { List, ListItem, Divider, Checkbox, IconButton } from '@mui/material'
+import Icons from '@mui/icons-material' // For general icons accessed by key.
 import {
     FavoriteBorder,
     Favorite,
     CircleOutlined,
     CheckCircle,
+    Close,
 } from '@mui/icons-material'
 
 // Task model.
@@ -19,17 +21,26 @@ const ListModel = styled(motion.div)`
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 42px 1fr 42px;
+    grid-template-columns: 42px 1fr 42px 42px;
     grid-template-rows: 1fr 1fr;
     grid-template-areas:
-        'check text fav'
-        'check text fav';
+        'check text fav close'
+        'check text fav close';
 
-    @media (max-width: 600px) {
+    @media (max-width: 800px) {
         grid-template-areas:
-            'check text text'
-            'fav text text';
+            'check text text close'
+            'fav text text close';
     }
+`
+const TaskSpan = styled(motion.div)`
+    grid-area: text;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    overflow-wrap: break-word;
+
+    padding: 0px 20px;
 `
 const TaskModel = () => {
     return (
@@ -42,12 +53,39 @@ const TaskModel = () => {
                         icon={<CircleOutlined />}
                         checkedIcon={<CheckCircle />}
                     />
+                    <TaskSpan>
+                        <span>
+                            Clean the house if is too dirty please mama
+                            c&apos;mon lets clean
+                        </span>
+                        <span
+                            style={{
+                                fontSize: '13px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '5px',
+                            }}
+                        >
+                            <Favorite sx={{ fontSize: '13px' }} /> house tasks |
+                            Tomorrow
+                        </span>
+                    </TaskSpan>
                     <Checkbox
                         sx={{ gridArea: 'fav' }}
                         color="error"
                         icon={<FavoriteBorder />}
                         checkedIcon={<Favorite />}
                     />
+                    <IconButton
+                        sx={{
+                            gridArea: 'close',
+                            marginTop: 'auto',
+                            marginBottom: 'auto',
+                            maxHeight: '42px',
+                        }}
+                    >
+                        <Close />
+                    </IconButton>
                 </ListModel>
             </ListItem>
             <Divider />
@@ -74,11 +112,6 @@ export default function TaskList({
 }) {
     return (
         <TaskListDiv>
-            <TaskModel />
-            <TaskModel />
-            <TaskModel />
-            <TaskModel />
-            <TaskModel />
             <TaskModel />
         </TaskListDiv>
     )

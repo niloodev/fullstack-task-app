@@ -24,7 +24,7 @@ export const DashboardMain = styled(motion.main)`
     gap: 5px;
     overflow: hidden;
 
-    @media (max-width: 600px) {
+    @media (max-width: 800px) {
         width: 100%;
         height: 100%;
         padding: 0px;
@@ -49,7 +49,7 @@ const ListDisplayStyled = styled(motion.div)`
     align-items: center;
     padding: 0px 40px;
 
-    @media (max-width: 600px) {
+    @media (max-width: 800px) {
         justify-content: center;
     }
 `
@@ -62,7 +62,7 @@ const Date = styled(motion.span)`
     bottom: 15px;
     color: var(--color-secondary);
 
-    @media (min-width: 600px) {
+    @media (min-width: 800px) {
         padding-left: 5px;
     }
 `

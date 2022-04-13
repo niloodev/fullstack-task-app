@@ -6,7 +6,6 @@ import {
     SET_USERINFO,
     SET_AUTHUSER,
     SET_ISLOADING,
-    SET_AUTHFUNCTIONS,
 } from '../constants/action-types'
 
 // Get store initial state to put on reducer.
@@ -26,20 +25,6 @@ function rootReducer(state = InitialState, action: AnyAction) {
             return {
                 ...state,
                 auth: { ...state.auth, isLoading: action.payload },
-            }
-            break
-        case SET_AUTHFUNCTIONS:
-            return {
-                ...state,
-                auth: {
-                    ...state.auth,
-                    signInEmailAndPassword:
-                        action.payload.signInEmailAndPassword,
-                    createUserWithEmailAndPassword:
-                        action.payload.createUserWithEmailAndPassword,
-                    signInWithGithub: action.payload.signInWithGithub,
-                    signOut: action.payload.signOut,
-                },
             }
             break
         //// USER SECTION.

@@ -3,18 +3,6 @@ export default {
     auth: {
         authUser: 'waiting',
         isLoading: false,
-        signInEmailAndPassword: () => {
-            return
-        },
-        createUserWithEmailAndPassword: () => {
-            return
-        },
-        signInWithGithub: () => {
-            return
-        },
-        signOut: () => {
-            return
-        },
     },
     user: {
         userName: '',
@@ -24,16 +12,8 @@ export default {
 // Main type.
 export interface InitialStateType {
     auth: {
-        authUser: FilterAuth | string | null
+        authUser: FilterAuth & string & null
         isLoading: boolean
-        signInEmailAndPassword: (email: string, password: string) => void
-        createUserWithEmailAndPassword: (
-            email: string,
-            password: string,
-            user: string
-        ) => void
-        signInWithGithub: () => void
-        signOut: () => void
     }
     user: FilterUser
 }
@@ -46,4 +26,26 @@ export interface FilterAuth {
 
 export interface FilterUser {
     userName: string
+    tasks: {
+        [key: string]: FilterTasks
+    } | null
+    tasksList: {
+        [key: string]: FilterTasksList
+    } | null
+}
+
+export interface FilterTasksList {
+    icon: string
+    color: string
+    title: string
+    created: string
+}
+
+export interface FilterTasks {
+    title: string
+    taskList: string
+    created: string
+    date: string
+    checked: boolean
+    fav: boolean
 }

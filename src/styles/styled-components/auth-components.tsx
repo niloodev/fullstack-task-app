@@ -56,7 +56,7 @@ export const AuthBox = styled(motion.div)`
     border-bottom: 6px solid var(--color-warning);
     border-left: 6px solid var(--color-warning);
 
-    @media (max-width: 450px) {
+    @media (max-width: 600px) {
         width: calc(100% - 20px);
         height: calc(100% - 20px);
 
