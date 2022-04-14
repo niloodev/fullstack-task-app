@@ -13,7 +13,7 @@ import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
 // Get app functionalities.
-import { signOut } from '../../lib/redux/actions/action'
+import { signOut, addTasksList } from '../../lib/redux/actions/action'
 
 // Import some Material UI components.
 import {
@@ -77,6 +77,7 @@ const SearchButton = ({
                     input: { color: 'secondary.main' },
                     transform: 'scale(1, 1)',
                     width: '100%',
+                    marginTop: '3px',
                 }}
                 focused
             />
@@ -302,6 +303,7 @@ export default function SideBar() {
                     : null}
 
                 <ShowListButton
+                    onClick={() => dispatch(addTasksList())}
                     iconType="Add"
                     textColor="warning.main"
                     iconColor="warning.main"

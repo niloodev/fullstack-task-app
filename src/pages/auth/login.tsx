@@ -25,7 +25,7 @@ import {
     AuthSeparator,
     AuthP,
     AuthCredits,
-} from '../../styles/styled-components/auth-components'
+} from '../../styles/components/auth-components'
 
 // Head and Link from Next.
 import Head from 'next/head'

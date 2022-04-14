@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Import action-types constants. (🐸: Avoid using strings!)
 import {
     SET_AUTHUSER,
@@ -45,6 +46,15 @@ import {
     DatabaseReference,
 } from 'firebase/database'
 
+// Get toast manager from Sweet Alert 2.
+import {
+    toast,
+    tasksListModal,
+} from '../../../styles/components/modal-components'
+
+// Get error translator (🐸: Just for making code errors legible)
+import firebaseErrors from '../../firebase/firebase-error-translator'
+
 // Basically sets the user initial values. (🐸: Used in createUserWithEmailAndPassword and signInWithGithub!)
 const setUserBasicValues = (ref: DatabaseReference, userName: string) => {
     set(ref, {
@@ -70,8 +80,15 @@ export function signInEmailAndPassword(email: string, password: string) {
         try {
             // Signs in.
             await signInUserEmail(AuthObj, email, password)
-        } catch (err) {
-            // Put error here.
+            toast.fire({
+                icon: 'success',
+                title: 'Signed in',
+            })
+        } catch (err: any) {
+            toast.fire({
+                icon: 'error',
+                title: firebaseErrors[err.code as keyof typeof firebaseErrors],
+            })
         }
         // Sets loading.
         dispatch(setIsLoading(false))
@@ -94,8 +111,16 @@ export function createUserWithEmailAndPassword(
                 ref(dataObj, 'user/' + userCredential.user.uid),
                 user
             )
-        } catch (err) {
-            // Sets error here.
+            // Creates toast | snackbar.
+            toast.fire({
+                icon: 'success',
+                title: 'Signed in',
+            })
+        } catch (err: any) {
+            toast.fire({
+                icon: 'error',
+                title: firebaseErrors[err.code as keyof typeof firebaseErrors],
+            })
         }
         // Sets loading.
         dispatch(setIsLoading(false))
@@ -121,8 +146,16 @@ export function signInWithGithub() {
                     userRef,
                     userCredential.user.displayName as string
                 )
-        } catch (err) {
-            // Sets error here
+            // Creates toast / snackbar.
+            toast.fire({
+                icon: 'success',
+                title: 'Signed in',
+            })
+        } catch (err: any) {
+            toast.fire({
+                icon: 'error',
+                title: firebaseErrors[err.code as keyof typeof firebaseErrors],
+            })
         }
         // Sets loading.
         dispatch(setIsLoading(false))
@@ -139,6 +172,11 @@ export function signOut() {
         dispatch(setAuthUser(null))
         // Sets loading.
         dispatch(setIsLoading(false))
+        // Creates toast.
+        toast.fire({
+            icon: 'warning',
+            title: 'Signed out',
+        })
     }
 }
 
@@ -155,7 +193,7 @@ export function setUserInfo(payload: FilterUser) {
     }
 }
 
-export function addTasksList(payload: FilterTasksList & { created?: string }) {
+export function addTasksList() {
     return async (dispatch: Dispatch, getState: () => InitialStateType) => {
         // Check if user is authenticated.
         if (
@@ -163,18 +201,23 @@ export function addTasksList(payload: FilterTasksList & { created?: string }) {
             getState().auth.authUser == 'waiting'
         )
             return
+
+        await tasksListModal.fire({
+            title: 'something',
+        })
+
         // 🐸: Get UID of user in state, and then create a new key / id for the new list type.
         // The "push" is to create a new key and the "child" is to reference all the children of
         // "tasksList" property from dynamic database.
-        const userUid = getState().auth.authUser['uid']
-        const newId = push(
-            child(ref(dataObj), 'user/' + userUid + '/tasksList')
-        ).key
+        // const userUid = getState().auth.authUser['uid']
+        // const newId = push(
+        //     child(ref(dataObj), 'user/' + userUid + '/tasksList')
+        // ).key
 
-        // Sets the new task list using update (more reliable).
-        await update(ref(dataObj, 'user/' + userUid + '/tasksList/' + newId), {
-            ...payload,
-            created: moment().toISOString(),
-        })
+        // // Sets the new task list using update (more reliable).
+        // await update(ref(dataObj, 'user/' + userUid + '/tasksList/' + newId), {
+        //     ...payload,
+        //     created: moment().toISOString(),
+        // })
     }
 }

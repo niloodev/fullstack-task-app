@@ -5,6 +5,14 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
+// Material UI imports.
+import { TextField } from '@mui/material'
+
+// SweetAlert2 imperative modals and snackbars.
+import swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+const reactSwal = withReactContent(swal)
+
 // Moment import. (Date management)
 import moment from 'moment'
 

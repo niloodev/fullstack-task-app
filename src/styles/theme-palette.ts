@@ -9,10 +9,10 @@ const themePalette = {
             main: '#121212',
         },
         secondary: {
-            main: '#EDEDED',
+            main: '#FFF',
         },
         warning: {
-            main: '#4b9e28',
+            main: '#51942A',
         },
         error: {
             main: '#d32f2f',

@@ -7,9 +7,9 @@ import React from 'react'
 import {
     DashboardMain,
     ListDisplay,
-} from '../../styles/styled-components/dashboard-main-components'
-import TaskList from '../../styles/styled-components/dashboard-task-components'
-import SideBar from '../../styles/styled-components/dashboard-side-components'
+} from '../../styles/components/dashboard-main-components'
+import TaskList from '../../styles/components/dashboard-task-components'
+import SideBar from '../../styles/components/dashboard-side-components'
 
 // Head from Next.
 import Head from 'next/head'
