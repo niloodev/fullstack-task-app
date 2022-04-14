@@ -190,7 +190,7 @@ const SideBarStyled = styled(motion.div)`
     flex-flow: column;
 
     overflow-y: auto;
-    overflow-x: visible;
+    overflow-x: hidden;
 
     @media (max-width: 800px) {
         z-index: 2;
