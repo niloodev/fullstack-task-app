@@ -4,16 +4,22 @@ import {
     SET_AUTHUSER,
     SET_ISLOADING,
     SET_USERINFO,
+    SNACKBAR,
+    CLEAR_SNACKBAR,
+    OPEN_MODAL,
+    CLOSE_MODAL,
 } from '../constants/action-types'
 
-// Get types from initial state and Redux.
+// Get types.
+import { ModalType } from '../../../styles/components/modal-components' // Modal types.
 import {
     FilterAuth,
     FilterTasksList,
     FilterUser,
+    FilterToast,
     InitialStateType,
 } from '../store-initial-state'
-import { Dispatch } from 'redux'
+import { Dispatch } from 'redux' // Dispatch type from Redux. (Thunks)
 
 // Import Moment for timestamps and everything related to it.
 import moment from 'moment'
@@ -46,12 +52,6 @@ import {
     DatabaseReference,
 } from 'firebase/database'
 
-// Get toast manager from Sweet Alert 2.
-import {
-    toast,
-    tasksListModal,
-} from '../../../styles/components/modal-components'
-
 // Get error translator (🐸: Just for making code errors legible)
 import firebaseErrors from '../../firebase/firebase-error-translator'
 
@@ -60,6 +60,23 @@ const setUserBasicValues = (ref: DatabaseReference, userName: string) => {
     set(ref, {
         userName,
     })
+}
+
+////// Interface actions.
+export function callSnackbar(payload: FilterToast) {
+    return { type: SNACKBAR, payload }
+}
+
+export function clearSnackbar() {
+    return { type: CLEAR_SNACKBAR }
+}
+
+export function openModal(type: ModalType) {
+    return { type: OPEN_MODAL, payload: { open: true, type } }
+}
+
+export function closeModal() {
+    return { type: CLOSE_MODAL }
 }
 
 ////// Auth actions.
@@ -80,15 +97,17 @@ export function signInEmailAndPassword(email: string, password: string) {
         try {
             // Signs in.
             await signInUserEmail(AuthObj, email, password)
-            toast.fire({
-                icon: 'success',
-                title: 'Signed in',
-            })
+            // Calls snackbar.
+            dispatch(callSnackbar({ message: 'Signed in', variant: 'success' }))
         } catch (err: any) {
-            toast.fire({
-                icon: 'error',
-                title: firebaseErrors[err.code as keyof typeof firebaseErrors],
-            })
+            // Calls snackbar error.
+            dispatch(
+                callSnackbar({
+                    message:
+                        firebaseErrors[err.code as keyof typeof firebaseErrors],
+                    variant: 'error',
+                })
+            )
         }
         // Sets loading.
         dispatch(setIsLoading(false))
@@ -111,16 +130,17 @@ export function createUserWithEmailAndPassword(
                 ref(dataObj, 'user/' + userCredential.user.uid),
                 user
             )
-            // Creates toast | snackbar.
-            toast.fire({
-                icon: 'success',
-                title: 'Signed in',
-            })
+            // Calls snackbar.
+            dispatch(callSnackbar({ message: 'Signed in', variant: 'success' }))
         } catch (err: any) {
-            toast.fire({
-                icon: 'error',
-                title: firebaseErrors[err.code as keyof typeof firebaseErrors],
-            })
+            // Calls snackbar error.
+            dispatch(
+                callSnackbar({
+                    message:
+                        firebaseErrors[err.code as keyof typeof firebaseErrors],
+                    variant: 'error',
+                })
+            )
         }
         // Sets loading.
         dispatch(setIsLoading(false))
@@ -146,16 +166,17 @@ export function signInWithGithub() {
                     userRef,
                     userCredential.user.displayName as string
                 )
-            // Creates toast / snackbar.
-            toast.fire({
-                icon: 'success',
-                title: 'Signed in',
-            })
+            // Calls snackbar.
+            dispatch(callSnackbar({ message: 'Signed in', variant: 'success' }))
         } catch (err: any) {
-            toast.fire({
-                icon: 'error',
-                title: firebaseErrors[err.code as keyof typeof firebaseErrors],
-            })
+            // Calls snackbar error.
+            dispatch(
+                callSnackbar({
+                    message:
+                        firebaseErrors[err.code as keyof typeof firebaseErrors],
+                    variant: 'error',
+                })
+            )
         }
         // Sets loading.
         dispatch(setIsLoading(false))
@@ -172,11 +193,8 @@ export function signOut() {
         dispatch(setAuthUser(null))
         // Sets loading.
         dispatch(setIsLoading(false))
-        // Creates toast.
-        toast.fire({
-            icon: 'warning',
-            title: 'Signed out',
-        })
+        // Calls snackbar.
+        dispatch(callSnackbar({ message: 'Signed out', variant: 'warning' }))
     }
 }
 
@@ -193,7 +211,7 @@ export function setUserInfo(payload: FilterUser) {
     }
 }
 
-export function addTasksList() {
+export function addTasksList(payload: FilterTasksList) {
     return async (dispatch: Dispatch, getState: () => InitialStateType) => {
         // Check if user is authenticated.
         if (
@@ -202,22 +220,19 @@ export function addTasksList() {
         )
             return
 
-        await tasksListModal.fire({
-            title: 'something',
-        })
-
         // 🐸: Get UID of user in state, and then create a new key / id for the new list type.
         // The "push" is to create a new key and the "child" is to reference all the children of
         // "tasksList" property from dynamic database.
-        // const userUid = getState().auth.authUser['uid']
-        // const newId = push(
-        //     child(ref(dataObj), 'user/' + userUid + '/tasksList')
-        // ).key
 
-        // // Sets the new task list using update (more reliable).
-        // await update(ref(dataObj, 'user/' + userUid + '/tasksList/' + newId), {
-        //     ...payload,
-        //     created: moment().toISOString(),
-        // })
+        const userUid = getState().auth.authUser['uid']
+        const newId = push(
+            child(ref(dataObj), 'user/' + userUid + '/tasksList')
+        ).key
+
+        // Sets the new task list using update (more reliable).
+        await update(ref(dataObj, 'user/' + userUid + '/tasksList/' + newId), {
+            ...payload,
+            created: moment().toISOString(),
+        })
     }
 }

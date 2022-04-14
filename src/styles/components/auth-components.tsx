@@ -107,10 +107,10 @@ export const AuthInput = ({
     return (
         <CapsuleDiv>
             <TextField
-                {...props}
                 variant="outlined"
                 color="warning"
                 style={{ width: '100%' }}
+                {...props}
             />
             <LabelError>{errorLog}</LabelError>
         </CapsuleDiv>

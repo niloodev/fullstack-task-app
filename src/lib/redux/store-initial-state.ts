@@ -1,3 +1,6 @@
+import { OptionsObject } from 'notistack' // Get typeof options in enqueueSnackbar.
+import type { ModalType } from '../../styles/components/modal-components' // Get typeof modal types.
+
 // 🐸: The default state of application and its type declarations.
 export default {
     auth: {
@@ -6,6 +9,15 @@ export default {
     },
     user: {
         userName: '',
+        tasks: null,
+        tasksList: null,
+    },
+    interface: {
+        toast: null,
+        modal: {
+            open: false,
+            type: '',
+        },
     },
 }
 
@@ -16,9 +28,20 @@ export interface InitialStateType {
         isLoading: boolean
     }
     user: FilterUser
+    interface: {
+        toast: (OptionsObject & { message: string }) | null
+        modal: FilterModal
+    }
 }
 
 // Nested types.
+export type FilterToast = (OptionsObject & { message: string }) | null
+
+export interface FilterModal {
+    open: boolean
+    type: ModalType
+}
+
 export interface FilterAuth {
     uid: string
     email: string | null

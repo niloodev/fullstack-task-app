@@ -4,7 +4,7 @@
 import React, { useState } from 'react'
 
 // Framer Motion import.
-import { HTMLMotionProps, motion } from 'framer-motion'
+import { HTMLMotionProps, AnimatePresence, motion } from 'framer-motion'
 
 // Import Styled Components.
 import styled from 'styled-components'
@@ -13,7 +13,7 @@ import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
 // Get app functionalities.
-import { signOut, addTasksList } from '../../lib/redux/actions/action'
+import { signOut, openModal } from '../../lib/redux/actions/action'
 
 // Import some Material UI components.
 import {
@@ -106,6 +106,7 @@ const SearchButton = ({
 const ToggleButtonStyled = styled(motion.div)`
     display: none;
     position: absolute;
+    z-index: 3;
 
     @media (max-width: 800px) {
         display: flex;
@@ -123,8 +124,8 @@ const ToggleButton = ({
             style={
                 toggle
                     ? {
-                          top: '5px',
-                          right: '-45px',
+                          top: '15px',
+                          left: '15px',
                       }
                     : {
                           bottom: '15px',
@@ -143,7 +144,7 @@ const ToggleButton = ({
 const ShowListButton = ({
     iconType = 'ListAlt',
     iconColor = 'primary.main',
-    textColor = 'primary.main',
+    textColor = '',
     children = 'template button',
     ...props
 }: {
@@ -154,25 +155,32 @@ const ShowListButton = ({
 } & ListItemButtonProps) => {
     const Icon = Icons[iconType]
     return (
-        <ListItemButton
-            sx={{
-                color: textColor,
-                gap: '5px',
-                paddingTop: '15px',
-                paddingBottom: '15px',
-            }}
-            {...props}
+        <motion.div
+            layout
+            layoutScroll
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
         >
-            <Icon sx={{ color: iconColor }} />
-            {children}
-        </ListItemButton>
+            <ListItemButton
+                sx={{
+                    color: textColor == '' ? iconColor : textColor,
+                    gap: '5px',
+                    paddingTop: '15px',
+                    paddingBottom: '15px',
+                }}
+                {...props}
+            >
+                <Icon sx={{ color: iconColor }} />
+                {children}
+            </ListItemButton>
+        </motion.div>
     )
 }
 
 // SideBar component.
 const SideBarStyled = styled(motion.div)`
     border-radius: 10px;
-    padding: 10px;
     grid-area: side;
     min-width: 230px;
 
@@ -181,13 +189,16 @@ const SideBarStyled = styled(motion.div)`
     display: flex;
     flex-flow: column;
 
+    overflow-y: auto;
+    overflow-x: visible;
+
     @media (max-width: 800px) {
         z-index: 2;
         border-radius: 0px;
         position: absolute;
 
-        width: calc(100% - 20px);
-        height: calc(100% - 20px);
+        width: 100%;
+        height: 100%;
 
         transition: all 0.2s ease;
         transform: translateX(0%);
@@ -203,13 +214,13 @@ export default function SideBar() {
     // Anchor for Material UI Menu component.
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     // For mobile toggle bar.
-    const [toggle, setToggle] = useState(true)
+    const [toggle, setToggle] = useState(false)
     // Redux hook.
     const dispatch = useDispatch()
     const tasksList: any = useSelector(state => state.user.tasksList)
 
     return (
-        <SideBarStyled data-toggle={toggle}>
+        <>
             <ToggleButton
                 toggle={toggle}
                 onClick={() => {
@@ -217,100 +228,105 @@ export default function SideBar() {
                     else setToggle(true)
                 }}
             />
-            <List
-                sx={{
-                    gap: '10px',
-                    overflowY: 'auto',
-                    padding: 0,
-                }}
-            >
-                <ListSubheader
+            <SideBarStyled data-toggle={toggle} layoutScroll>
+                <List
                     sx={{
-                        gap: '5px',
-                        bgcolor: 'secondary.main',
-                        display: 'flex',
-                        flexFlow: 'row',
-                        flexWrap: 'no-wrap',
-                        alignItems: 'center',
-                        padding: '7px',
+                        gap: '10px',
+                        padding: '10px',
                     }}
                 >
-                    <IconButton
-                        size="small"
-                        onClick={(
-                            event: React.MouseEvent<HTMLButtonElement>
-                        ) => {
-                            setAnchorEl(event.currentTarget)
-                        }}
-                    >
-                        <Avatar />
-                    </IconButton>
-                    <Menu
-                        open={Boolean(anchorEl)}
-                        anchorEl={anchorEl}
-                        onClose={() => setAnchorEl(null)}
+                    <ListSubheader
                         sx={{
-                            ul: { padding: 0 },
-                        }}
-                        transitionDuration={{
-                            appear: 100,
-                            enter: 100,
-                            exit: 100,
+                            gap: '5px',
+                            bgcolor: 'secondary.main',
+                            display: 'flex',
+                            flexFlow: 'row',
+                            flexWrap: 'no-wrap',
+                            alignItems: 'center',
+                            padding: '10px',
                         }}
                     >
-                        <MenuItem
-                            onClick={() => {
-                                dispatch(signOut())
-                            }}
-                            sx={{
-                                color: 'error.main',
+                        <IconButton
+                            size="small"
+                            onClick={(
+                                event: React.MouseEvent<HTMLButtonElement>
+                            ) => {
+                                setAnchorEl(event.currentTarget)
                             }}
                         >
-                            Logout
-                        </MenuItem>
-                    </Menu>
-                    <span>{userData.userName}</span>
-                    <SearchButton />
-                </ListSubheader>
+                            <Avatar />
+                        </IconButton>
+                        <Menu
+                            open={Boolean(anchorEl)}
+                            anchorEl={anchorEl}
+                            onClose={() => setAnchorEl(null)}
+                            sx={{
+                                ul: { padding: 0 },
+                            }}
+                            transitionDuration={{
+                                appear: 100,
+                                enter: 100,
+                                exit: 100,
+                            }}
+                        >
+                            <MenuItem
+                                onClick={() => {
+                                    dispatch(signOut())
+                                }}
+                                sx={{
+                                    color: 'error.main',
+                                }}
+                            >
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                        <span>{userData.userName}</span>
+                        <SearchButton />
+                    </ListSubheader>
 
-                <Divider />
+                    <Divider />
 
-                <ShowListButton iconType="LightModeOutlined">
-                    Today
-                </ShowListButton>
-                <ShowListButton iconType="FavoriteBorder">
-                    Favorite
-                </ShowListButton>
-                <ShowListButton iconType="CalendarMonth">
-                    Planned
-                </ShowListButton>
-                <ShowListButton iconType="HomeOutlined">Tasks</ShowListButton>
+                    <ShowListButton iconType="LightModeOutlined">
+                        Today
+                    </ShowListButton>
+                    <ShowListButton iconType="FavoriteBorder">
+                        Favorite
+                    </ShowListButton>
+                    <ShowListButton iconType="CalendarMonth">
+                        Planned
+                    </ShowListButton>
+                    <ShowListButton iconType="HomeOutlined">
+                        Tasks
+                    </ShowListButton>
 
-                <Divider />
+                    <Divider />
 
-                {tasksList
-                    ? Object.keys(tasksList).map(key => {
-                          return (
-                              <ShowListButton
-                                  key={key}
-                                  iconType={tasksList[key].icon}
-                                  iconColor={tasksList[key].color}
-                              >
-                                  {tasksList[key].title}
-                              </ShowListButton>
-                          )
-                      })
-                    : null}
-
-                <ShowListButton
-                    onClick={() => dispatch(addTasksList())}
-                    iconType="Add"
-                    textColor="warning.main"
-                    iconColor="warning.main"
-                >
-                    New list
-                </ShowListButton>
-            </List>
-        </SideBarStyled>
+                    <AnimatePresence>
+                        {tasksList
+                            ? Object.keys(tasksList).map(key => {
+                                  return (
+                                      <ShowListButton
+                                          key={key}
+                                          iconType={tasksList[key].icon}
+                                          iconColor={tasksList[key].color}
+                                      >
+                                          {tasksList[key].title}
+                                      </ShowListButton>
+                                  )
+                              })
+                            : null}
+                        <ShowListButton
+                            key="addTasksList"
+                            onClick={() => dispatch(openModal('add_tasksList'))}
+                            iconType="Add"
+                            textColor="warning.main"
+                            iconColor="warning.main"
+                        >
+                            New list
+                        </ShowListButton>
+                    </AnimatePresence>
+                </List>
+            </SideBarStyled>
+        </>
     )
 }
