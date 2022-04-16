@@ -81,7 +81,7 @@ export default createGlobalStyle`
     html,
     body,
     #__next {
-        width: 100%;
+        width: 100%; min-width: 330px;
         height: 100%; min-height: 450px;
 
         margin: 0;
