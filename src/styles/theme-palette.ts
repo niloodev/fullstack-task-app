@@ -1,6 +1,5 @@
 // 🐸: This object represents all colors and CSS definitions, it will be applied on Styled Components and
 // Material UI providers respectively.
-
 const themePalette = {
     // 🐸: The "palette.color.main" format is to follow Material UI default theme object.
     // You can see more about it here: https://mui.com/customization/theming/

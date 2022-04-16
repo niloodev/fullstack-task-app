@@ -81,7 +81,7 @@ export default createGlobalStyle`
     html,
     body,
     #__next {
-        width: 100%; min-width: 330px;
+        width: 100%;
         height: 100%; min-height: 450px;
 
         margin: 0;
@@ -95,6 +95,7 @@ export default createGlobalStyle`
     /* Scrollbar customization. */
     ::-webkit-scrollbar {
         width: 2px;
+        height: 2px;
     }
 
     ::-webkit-scrollbar-track {

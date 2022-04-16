@@ -301,7 +301,6 @@ const modals = {
                 <MobileDateTimePicker
                     label="To"
                     renderInput={props => <TextField {...props} />}
-                    showToolbar
                     value={date}
                     onChange={e => setDate(moment(e).toISOString())}
                 />
