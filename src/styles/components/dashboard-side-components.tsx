@@ -327,6 +327,7 @@ export default function SideBar() {
                         onClick={() => {
                             dispatch(selectTasksList('today'))
                             dispatch(selectDate(moment().toISOString()))
+                            setToggle(false)
                         }}
                     >
                         Today
@@ -336,6 +337,7 @@ export default function SideBar() {
                         onClick={() => {
                             dispatch(selectTasksList('favorite'))
                             dispatch(selectDate(''))
+                            setToggle(false)
                         }}
                     >
                         Favorite
@@ -345,6 +347,7 @@ export default function SideBar() {
                         onClick={() => {
                             dispatch(selectTasksList('tasks'))
                             dispatch(selectDate(''))
+                            setToggle(false)
                         }}
                     >
                         Tasks
@@ -363,6 +366,7 @@ export default function SideBar() {
                                           onClick={() => {
                                               dispatch(selectTasksList(key))
                                               dispatch(selectDate(''))
+                                              setToggle(false)
                                           }}
                                       >
                                           {tasksList[key].title}
