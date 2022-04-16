@@ -10,6 +10,8 @@ import {
     CLEAR_SNACKBAR,
     OPEN_MODAL,
     CLOSE_MODAL,
+    SELECT_TASKSLIST,
+    SELECT_DATE,
 } from '../constants/action-types'
 
 // Get store initial state to put on reducer.
@@ -55,6 +57,28 @@ function rootReducer(state = InitialState, action: AnyAction) {
                 interface: {
                     ...state.interface,
                     modal: { open: false, type: '' },
+                },
+            }
+        case SELECT_TASKSLIST:
+            return {
+                ...state,
+                interface: {
+                    ...state.interface,
+                    current: {
+                        ...state.interface.current,
+                        tasksListId: action.payload,
+                    },
+                },
+            }
+        case SELECT_DATE:
+            return {
+                ...state,
+                interface: {
+                    ...state.interface,
+                    current: {
+                        ...state.interface.current,
+                        dateFilter: action.payload,
+                    },
                 },
             }
     }

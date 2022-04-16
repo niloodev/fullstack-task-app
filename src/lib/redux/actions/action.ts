@@ -8,6 +8,8 @@ import {
     CLEAR_SNACKBAR,
     OPEN_MODAL,
     CLOSE_MODAL,
+    SELECT_TASKSLIST,
+    SELECT_DATE,
 } from '../constants/action-types'
 
 // Get types.
@@ -18,6 +20,7 @@ import {
     FilterUser,
     FilterToast,
     InitialStateType,
+    FilterTasks,
 } from '../store-initial-state'
 import { Dispatch } from 'redux' // Dispatch type from Redux. (Thunks)
 
@@ -49,6 +52,7 @@ import {
     update,
     set,
     get,
+    remove,
     DatabaseReference,
 } from 'firebase/database'
 
@@ -77,6 +81,14 @@ export function openModal(type: ModalType) {
 
 export function closeModal() {
     return { type: CLOSE_MODAL }
+}
+
+export function selectTasksList(payload: string) {
+    return { type: SELECT_TASKSLIST, payload }
+}
+
+export function selectDate(payload: string) {
+    return { type: SELECT_DATE, payload }
 }
 
 ////// Auth actions.
@@ -234,5 +246,77 @@ export function addTasksList(payload: FilterTasksList) {
             ...payload,
             created: moment().toISOString(),
         })
+    }
+}
+
+export function addTasks(payload: FilterTasks) {
+    return async (dispatch: Dispatch, getState: () => InitialStateType) => {
+        // Check if user is authenticated.
+        if (
+            getState().auth.authUser == null ||
+            getState().auth.authUser == 'waiting'
+        )
+            return
+
+        // 🐸: Get UID of user in state, and then create a new key / id for the new task.
+        // The "push" is to create a new key and the "child" is to reference all the children of
+        // "tasksList" property from dynamic database.
+
+        const userUid = getState().auth.authUser['uid']
+        const newId = push(
+            child(ref(dataObj), 'user/' + userUid + '/tasks')
+        ).key
+
+        // Sets the new task using update (more reliable).
+        await update(ref(dataObj, 'user/' + userUid + '/tasks/' + newId), {
+            ...payload,
+            created: moment().toISOString(),
+        })
+    }
+}
+
+export function editTasks(payload: {
+    key: string
+    checked?: boolean
+    fav?: boolean
+    title?: string
+    taskList?: string
+    date?: string
+}) {
+    return async (dispatch: Dispatch, getState: () => InitialStateType) => {
+        // Check if user is authenticated.
+        if (
+            getState().auth.authUser == null ||
+            getState().auth.authUser == 'waiting'
+        )
+            return
+
+        // Get the user "uid".
+        const userUid = getState().auth.authUser['uid']
+
+        // Updates the task.
+        await update(
+            ref(dataObj, 'user/' + userUid + '/tasks/' + payload.key),
+            {
+                ...payload,
+            }
+        )
+    }
+}
+
+export function deleteTasks(payload: string) {
+    return async (dispatch: Dispatch, getState: () => InitialStateType) => {
+        // Check if user is authenticated.
+        if (
+            getState().auth.authUser == null ||
+            getState().auth.authUser == 'waiting'
+        )
+            return
+
+        // Get the user "uid".
+        const userUid = getState().auth.authUser['uid']
+
+        // Removes the task.
+        await remove(ref(dataObj, 'user/' + userUid + '/tasks/' + payload))
     }
 }

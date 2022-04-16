@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // React import.
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 // Framer Motion import.
 import { HTMLMotionProps, AnimatePresence, motion } from 'framer-motion'
@@ -12,8 +12,16 @@ import styled from 'styled-components'
 // Redux imports.
 import { useSelector, useDispatch } from 'react-redux'
 
+// Get UNIX timestamp.
+import moment from 'moment'
+
 // Get app functionalities.
-import { signOut, openModal } from '../../lib/redux/actions/action'
+import {
+    signOut,
+    openModal,
+    selectTasksList,
+    selectDate,
+} from '../../lib/redux/actions/action'
 
 // Import some Material UI components.
 import {
@@ -57,14 +65,23 @@ const SearchButtonDiv = styled(motion.div)`
 const SearchButton = ({
     motionProps,
     iconProps,
+    search = '',
+    onChange,
 }: {
     motionProps?: HTMLMotionProps<'div'>
     iconProps?: SvgIconProps
+    search?: string
+    onChange: (e: any) => any
 }) => {
     // Set states of functional component.
     const [toggle, setToggle] = useState(false)
     const SearchIcon = Icons['Search']
     const SearchOff = Icons['SearchOff']
+
+    // On toggle changes.
+    useEffect(() => {
+        onChange({ target: { value: '' } })
+    }, [toggle])
 
     return (
         <SearchButtonDiv {...motionProps} data-opened={toggle}>
@@ -72,6 +89,8 @@ const SearchButton = ({
                 label="Search"
                 variant="outlined"
                 color="secondary"
+                value={search}
+                onChange={onChange}
                 autoComplete="off"
                 sx={{
                     input: { color: 'secondary.main' },
@@ -154,6 +173,7 @@ const ShowListButton = ({
     children: string
 } & ListItemButtonProps) => {
     const Icon = Icons[iconType]
+
     return (
         <motion.div
             layout
@@ -211,13 +231,26 @@ const SideBarStyled = styled(motion.div)`
 export default function SideBar() {
     // Get user data from global state.
     const userData = useSelector(state => state.user)
+
     // Anchor for Material UI Menu component.
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+    // Search string.
+    const [search, setSearch] = useState('')
+
     // For mobile toggle bar.
     const [toggle, setToggle] = useState(false)
+
     // Redux hook.
     const dispatch = useDispatch()
     const tasksList: any = useSelector(state => state.user.tasksList)
+
+    let renderedTasksList: Array<string> = []
+    if (tasksList != null) {
+        renderedTasksList = Object.keys(tasksList).filter(key =>
+            tasksList[key].title.includes(search)
+        )
+    }
 
     return (
         <>
@@ -281,21 +314,39 @@ export default function SideBar() {
                             </MenuItem>
                         </Menu>
                         <span>{userData.userName}</span>
-                        <SearchButton />
+                        <SearchButton
+                            search={search}
+                            onChange={e => setSearch(e.target.value)}
+                        />
                     </ListSubheader>
 
                     <Divider />
 
-                    <ShowListButton iconType="LightModeOutlined">
+                    <ShowListButton
+                        iconType="LightModeOutlined"
+                        onClick={() => {
+                            dispatch(selectTasksList('today'))
+                            dispatch(selectDate(moment().toISOString()))
+                        }}
+                    >
                         Today
                     </ShowListButton>
-                    <ShowListButton iconType="FavoriteBorder">
+                    <ShowListButton
+                        iconType="FavoriteBorder"
+                        onClick={() => {
+                            dispatch(selectTasksList('favorite'))
+                            dispatch(selectDate(''))
+                        }}
+                    >
                         Favorite
                     </ShowListButton>
-                    <ShowListButton iconType="CalendarMonth">
-                        Planned
-                    </ShowListButton>
-                    <ShowListButton iconType="HomeOutlined">
+                    <ShowListButton
+                        iconType="HomeOutlined"
+                        onClick={() => {
+                            dispatch(selectTasksList('today'))
+                            dispatch(selectDate(''))
+                        }}
+                    >
                         Tasks
                     </ShowListButton>
 
@@ -303,12 +354,16 @@ export default function SideBar() {
 
                     <AnimatePresence>
                         {tasksList
-                            ? Object.keys(tasksList).map(key => {
+                            ? renderedTasksList.map(key => {
                                   return (
                                       <ShowListButton
                                           key={key}
                                           iconType={tasksList[key].icon}
                                           iconColor={tasksList[key].color}
+                                          onClick={() => {
+                                              dispatch(selectTasksList(key))
+                                              dispatch(selectDate(''))
+                                          }}
                                       >
                                           {tasksList[key].title}
                                       </ShowListButton>

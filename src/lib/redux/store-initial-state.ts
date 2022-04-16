@@ -1,6 +1,8 @@
 import { OptionsObject } from 'notistack' // Get typeof options in enqueueSnackbar.
 import type { ModalType } from '../../styles/components/modal-components' // Get typeof modal types.
 
+import moment from 'moment' // Get UNIX timestamp.
+
 // 🐸: The default state of application and its type declarations.
 export default {
     auth: {
@@ -18,6 +20,10 @@ export default {
             open: false,
             type: '',
         },
+        current: {
+            tasksListId: 'today',
+            dateFilter: moment().toISOString(),
+        },
     },
 }
 
@@ -31,6 +37,10 @@ export interface InitialStateType {
     interface: {
         toast: (OptionsObject & { message: string }) | null
         modal: FilterModal
+        current: {
+            tasksListId: string
+            dateFilter: string
+        }
     }
 }
 

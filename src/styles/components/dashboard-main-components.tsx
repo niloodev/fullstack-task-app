@@ -5,11 +5,11 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
-// Material UI imports.
-import { TextField } from '@mui/material'
-
 // Moment import. (Date management)
 import moment from 'moment'
+
+// Redux hooks and actions.
+import { useSelector } from 'react-redux'
 
 // Dashboard main is the parent component to all others in dashboard.
 export const DashboardMain = styled(motion.main)`
@@ -70,10 +70,31 @@ const Date = styled(motion.span)`
     }
 `
 export const ListDisplay = () => {
+    // Get tasks payload.
+    const tasksListMap = useSelector(state => state.user.tasksList)
+    // Get interface payload.
+    const { tasksListId, dateFilter } = useSelector(
+        state => state.interface.current
+    )
     return (
         <ListDisplayStyled>
-            <ListName>Today</ListName>
-            <Date>{moment().format('dddd, MMMM Do')}</Date>
+            <ListName>
+                {tasksListId == 'today'
+                    ? 'Today'
+                    : tasksListId == 'favorite'
+                    ? 'Favorite'
+                    : tasksListId == 'tasks'
+                    ? 'Tasks'
+                    : tasksListMap != null
+                    ? tasksListMap[tasksListId as keyof typeof tasksListMap]
+                          .title
+                    : 'undefined'}
+            </ListName>
+            <Date>
+                {dateFilter != ''
+                    ? moment(dateFilter).format('dddd, MMMM Do')
+                    : ''}
+            </Date>
         </ListDisplayStyled>
     )
 }

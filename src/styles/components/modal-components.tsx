@@ -10,7 +10,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 // Get application actions.
-import { addTasksList } from '../../lib/redux/actions/action'
+import { addTasksList, addTasks } from '../../lib/redux/actions/action'
 
 // Get application actions.
 import { closeModal } from '../../lib/redux/actions/action'
@@ -18,9 +18,21 @@ import { closeModal } from '../../lib/redux/actions/action'
 // Get color picker.
 import { SliderPicker, Color } from 'react-color'
 
+// Import Moment and MUI Time Picker.
+import moment from 'moment'
+import { MobileDateTimePicker } from '@mui/x-date-pickers'
+
 // Import Styled Components, Material UI and Framer Motion for stylization.
 import styled from 'styled-components'
-import { Menu, MenuItem, IconButton, Box } from '@mui/material'
+import {
+    Menu,
+    MenuItem,
+    IconButton,
+    Box,
+    Button,
+    Select,
+    TextField,
+} from '@mui/material'
 import * as Icons from '@mui/icons-material'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -85,11 +97,29 @@ const modals = {
 
         // Get the current icon.
         const SelectedIcon = Icons[icon as keyof typeof Icons]
+
+        // Confirm function.
+        function confirmAdd(listName: string, color: string, icon: string) {
+            if (listName.length < 3) setListNameError('Min. of 3 characters')
+            else {
+                setListNameError('')
+                dispatch(
+                    addTasksList({
+                        color: color,
+                        title: listName,
+                        created: '',
+                        icon,
+                    })
+                )
+                dispatch(closeModal())
+            }
+        }
+
         return (
             // Main box
             <ModalBox
-                layout
-                initial={{ scale: 0.4, opacity: 0 }}
+                key="add_tasksList"
+                initial={{ opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.4, opacity: 0 }}
             >
@@ -109,9 +139,9 @@ const modals = {
                         <SelectedIcon sx={{ color: color.toString() }} />
                     </IconButton>
                     <AuthInput
-                        sx={{ flex: '1' }}
-                        label="List name"
+                        divProps={{ style: { width: '100%' } }}
                         color="primary"
+                        label="List name"
                         errorLog={listNameError}
                         error={listNameError != ''}
                         inputProps={{ maxLength: 20 }}
@@ -119,24 +149,9 @@ const modals = {
                         value={listName}
                         onChange={e => setListName(e.target.value)}
                         onKeyDown={e => {
-                            if (e.key == 'Enter') {
-                                if (listName.length < 3)
-                                    setListNameError('Min. of 3 characters')
-                                else {
-                                    setListNameError('')
-                                    dispatch(
-                                        addTasksList({
-                                            color: color.toString(),
-                                            title: listName,
-                                            created: '',
-                                            icon,
-                                        })
-                                    )
-                                    dispatch(closeModal())
-                                }
-                            }
+                            if (e.key == 'Enter')
+                                confirmAdd(listName, color.toString(), icon)
                         }}
-                        focused
                     />
                 </Box>
                 {/* One of color pickers of React Color */}
@@ -144,6 +159,16 @@ const modals = {
                     color={color}
                     onChange={color => setColor(color.hex)}
                 />
+                {/* Add button */}
+                <Button
+                    onClick={() => confirmAdd(listName, color.toString(), icon)}
+                    sx={{
+                        marginTop: '15px',
+                        color: color.toString(),
+                    }}
+                >
+                    Add
+                </Button>
                 {/* Menu from IconButton */}
                 <Menu
                     anchorEl={anchorEl}
@@ -165,6 +190,132 @@ const modals = {
                         )
                     })}
                 </Menu>
+            </ModalBox>
+        )
+    },
+    add_task: () => {
+        // Get tasks list and selected list.
+        const tasksList = useSelector(state => state.user.tasksList)
+        const tasksListId = useSelector(
+            state => state.interface.current.tasksListId
+        )
+
+        // Form states.
+        const [taskName, setTaskName] = useState('')
+        const [taskNameError, setTaskNameError] = useState('')
+        const [list, setList] = useState(
+            tasksList != null
+                ? Object.keys(tasksList).filter(key => key == tasksListId)
+                      .length != 0
+                    ? tasksListId
+                    : ''
+                : ''
+        )
+        const [date, setDate] = useState<string | null>(moment().toISOString())
+
+        // Get dispatch
+        const dispatch = useDispatch()
+
+        // Confirm function.
+        function confirmAdd(
+            taskName: string,
+            taskList: string,
+            date: string | null
+        ) {
+            if (taskName.length < 3) setTaskNameError('Min. of 3 characters')
+            else {
+                setTaskNameError('')
+                dispatch(
+                    addTasks({
+                        title: taskName,
+                        checked: false,
+                        created: moment().toISOString(),
+                        date: date != null ? date : '',
+                        taskList,
+                        fav: false,
+                    })
+                )
+                dispatch(closeModal())
+            }
+        }
+
+        // Get icon from TaskList
+        const Icon =
+            list != '' && tasksList != null
+                ? Icons[tasksList[list].icon as keyof typeof Icons]
+                : Icons['Home']
+
+        return (
+            // Main box
+            <ModalBox
+                key="add_task"
+                style={{ gap: '5px' }}
+                initial={{ opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.4, opacity: 0 }}
+            >
+                {/* Basic TextField for task title */}
+                <AuthInput
+                    divProps={{ style: { width: '100%' } }}
+                    color="primary"
+                    label="Task name"
+                    errorLog={taskNameError}
+                    error={taskNameError != ''}
+                    inputProps={{ maxLength: 60 }}
+                    placeholder="My task name"
+                    value={taskName}
+                    onChange={e => setTaskName(e.target.value)}
+                    onKeyDown={e => {
+                        if (e.key == 'Enter') confirmAdd(taskName, list, date)
+                    }}
+                />
+                {/* Simple input wrapper. (Makes IconButton and the TextField aligned in a row) */}
+                <Box
+                    sx={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                    }}
+                >
+                    <Icon sx={{ flex: '1' }} />
+                    <Select
+                        displayEmpty
+                        value={list}
+                        onChange={e => setList(e.target.value)}
+                        sx={{ flex: '8' }}
+                    >
+                        <MenuItem value="">Without task list</MenuItem>
+                        {tasksList != null
+                            ? Object.keys(tasksList).map(key => {
+                                  return (
+                                      <MenuItem
+                                          key={key}
+                                          value={key}
+                                          sx={{ gap: '5px' }}
+                                      >
+                                          {tasksList[key].title}
+                                      </MenuItem>
+                                  )
+                              })
+                            : ''}
+                    </Select>
+                </Box>
+                {/* Time picker */}
+                <MobileDateTimePicker
+                    label="To"
+                    renderInput={props => <TextField {...props} />}
+                    showToolbar
+                    value={date}
+                    onChange={e => setDate(e)}
+                />
+                {/* Add button */}
+                <Button
+                    onClick={() => confirmAdd(taskName, list, date)}
+                    color="primary"
+                >
+                    Add
+                </Button>
             </ModalBox>
         )
     },
@@ -224,7 +375,7 @@ export default function ApplicationModals() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.15 }}
                 >
                     <CurrentModal />
                 </ModalsDiv>

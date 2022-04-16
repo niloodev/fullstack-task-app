@@ -5,7 +5,7 @@
 import React, { Ref } from 'react'
 
 // Framer Motion and Styled Components import.
-import { motion } from 'framer-motion'
+import { HTMLMotionProps, motion } from 'framer-motion'
 import styled from 'styled-components'
 
 // Material UI imports.
@@ -84,7 +84,7 @@ export const AuthSeparator = styled.div`
 `
 
 // 🐸: AuthInput component is the Material UI input with some customizations.
-const CapsuleDiv = styled.div`
+const CapsuleDiv = styled(motion.div)`
     width: 90%;
     position: relative;
 `
@@ -100,12 +100,14 @@ const LabelError = styled.div`
 `
 export const AuthInput = ({
     errorLog = '',
+    divProps,
     ...props
 }: {
     errorLog: string
+    divProps?: HTMLMotionProps<'div'>
 } & TextFieldProps): JSX.Element => {
     return (
-        <CapsuleDiv>
+        <CapsuleDiv {...divProps}>
             <TextField
                 variant="outlined"
                 color="warning"
