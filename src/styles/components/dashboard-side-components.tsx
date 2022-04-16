@@ -343,7 +343,7 @@ export default function SideBar() {
                     <ShowListButton
                         iconType="HomeOutlined"
                         onClick={() => {
-                            dispatch(selectTasksList('today'))
+                            dispatch(selectTasksList('tasks'))
                             dispatch(selectDate(''))
                         }}
                     >

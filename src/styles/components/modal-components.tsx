@@ -211,17 +211,13 @@ const modals = {
                     : ''
                 : ''
         )
-        const [date, setDate] = useState<string | null>(moment().toISOString())
+        const [date, setDate] = useState<string>(moment().toISOString())
 
         // Get dispatch
         const dispatch = useDispatch()
 
         // Confirm function.
-        function confirmAdd(
-            taskName: string,
-            taskList: string,
-            date: string | null
-        ) {
+        function confirmAdd(taskName: string, taskList: string, date: string) {
             if (taskName.length < 3) setTaskNameError('Min. of 3 characters')
             else {
                 setTaskNameError('')
@@ -307,7 +303,7 @@ const modals = {
                     renderInput={props => <TextField {...props} />}
                     showToolbar
                     value={date}
-                    onChange={e => setDate(e)}
+                    onChange={e => setDate(moment(e).toISOString())}
                 />
                 {/* Add button */}
                 <Button

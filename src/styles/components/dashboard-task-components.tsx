@@ -196,48 +196,47 @@ export default function TaskList() {
         state => state.interface.current
     )
 
-    let renderedTasks: Array<string> = []
-    if (tasks != null) {
-        // Filter by list
-        renderedTasks = Object.keys(tasks).filter(key => {
-            switch (tasksListId) {
-                case 'favorite':
-                    return tasks[key].fav == true
-                case 'tasks':
-                    return true
-                case 'today':
-                    return true
-                default:
-                    return tasks[key].taskList == tasksListId
-            }
-        })
-        // Filter by date
-        renderedTasks = renderedTasks.filter(key => {
-            if (dateFilter == '') return true
-            else return moment(tasks[key].date).isSame(dateFilter, 'day')
-        })
-        // Order by date
-        renderedTasks = renderedTasks.sort(
-            (a, b) =>
-                moment(tasks[a].date).unix() - moment(tasks[b].date).unix()
-        )
-    }
-
     return (
         <TaskListWrapper layoutScroll>
             <TaskListDiv>
                 {tasks != null
-                    ? renderedTasks.map(key => (
-                          <TaskModel
-                              key={key}
-                              keyId={key}
-                              title={tasks[key].title}
-                              date={tasks[key].date}
-                              taskListId={tasks[key].taskList}
-                              checked={tasks[key].checked}
-                              fav={tasks[key].fav}
-                          />
-                      ))
+                    ? Object.keys(tasks)
+                          .filter(key => {
+                              switch (tasksListId) {
+                                  case 'favorite':
+                                      return tasks[key].fav == true
+                                  case 'tasks':
+                                      return true
+                                  case 'today':
+                                      return true
+                                  default:
+                                      return tasks[key].taskList == tasksListId
+                              }
+                          })
+                          .filter(key => {
+                              if (dateFilter == '') return true
+                              else
+                                  return moment(tasks[key].date).isSame(
+                                      moment(dateFilter),
+                                      'day'
+                                  )
+                          })
+                          .sort(
+                              (a, b) =>
+                                  moment(tasks[a].date).unix() -
+                                  moment(tasks[b].date).unix()
+                          )
+                          .map(key => (
+                              <TaskModel
+                                  key={key}
+                                  keyId={key}
+                                  title={tasks[key].title}
+                                  date={tasks[key].date}
+                                  taskListId={tasks[key].taskList}
+                                  checked={tasks[key].checked}
+                                  fav={tasks[key].fav}
+                              />
+                          ))
                     : ''}
                 <motion.div layout>
                     <ListItemButton
