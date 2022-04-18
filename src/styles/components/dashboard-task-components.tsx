@@ -189,7 +189,6 @@ const TaskListDiv = styled(List)`
 export default function TaskList() {
     // Redux hooks.
     const dispatch = useDispatch()
-
     // Get lists and interface info.
     const tasks = useSelector(state => state.user.tasks)
     const { dateFilter, tasksListId } = useSelector(

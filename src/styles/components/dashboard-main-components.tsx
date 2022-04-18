@@ -1,15 +1,21 @@
 // React import.
-import React from 'react'
+import React, { useState } from 'react'
 
 // Framer Motion and Styled components import.
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
-// Moment import. (Date management)
+// Material UI import.
+import { Button, IconButton, TextField, Modal } from '@mui/material'
+import { DateRangeRounded, MoreHorizRounded } from '@mui/icons-material'
+
+// Moment import and MUI time picker.
 import moment from 'moment'
+import { StaticDatePicker } from '@mui/x-date-pickers'
 
 // Redux hooks and actions.
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectDate } from '../../lib/redux/actions/action'
 
 // Dashboard main is the parent component to all others in dashboard.
 export const DashboardMain = styled(motion.main)`
@@ -69,13 +75,33 @@ const Date = styled(motion.span)`
         padding-left: 5px;
     }
 `
+const Settings = styled(motion.div)`
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+
+    display: flex;
+    flex-flow: row-reverse;
+
+    gap: 5px;
+
+    @media (max-width: 500px) {
+        top: 15px;
+        max-height: 40px;
+    }
+`
 export const ListDisplay = () => {
     // Get tasks payload.
     const tasksListMap = useSelector(state => state.user.tasksList)
+    // Get dispatch.
+    const dispatch = useDispatch()
+    // State of simple date modal.
+    const [open, setOpen] = useState(false)
     // Get interface payload.
     const { tasksListId, dateFilter } = useSelector(
         state => state.interface.current
     )
+
     return (
         <ListDisplayStyled>
             <ListName>
@@ -92,9 +118,69 @@ export const ListDisplay = () => {
             </ListName>
             <Date>
                 {dateFilter != ''
-                    ? moment(dateFilter).format('dddd, MMMM Do')
+                    ? moment(dateFilter).format('dddd, MMMM Do, YYYY')
                     : ''}
             </Date>
+
+            <Settings>
+                {tasksListId != 'today' &&
+                tasksListId != 'favorite' &&
+                tasksListId != 'tasks' ? (
+                    <IconButton color="secondary">
+                        <MoreHorizRounded />
+                    </IconButton>
+                ) : (
+                    ''
+                )}
+
+                {tasksListId != 'today' ? (
+                    <>
+                        <Modal
+                            open={open}
+                            onClose={() => setOpen(false)}
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                        >
+                            <motion.div style={{ position: 'relative' }}>
+                                <StaticDatePicker
+                                    renderInput={props => (
+                                        <TextField {...props} />
+                                    )}
+                                    value={dateFilter}
+                                    onChange={e =>
+                                        dispatch(
+                                            selectDate(moment(e).toISOString())
+                                        )
+                                    }
+                                />
+                                <Button
+                                    sx={{
+                                        width: '100%',
+                                        position: 'absolute',
+                                        bottom: '0px',
+                                    }}
+                                    onClick={() => dispatch(selectDate(''))}
+                                >
+                                    Clear
+                                </Button>
+                            </motion.div>
+                        </Modal>
+                        <IconButton
+                            color="secondary"
+                            onClick={() =>
+                                open ? setOpen(false) : setOpen(true)
+                            }
+                        >
+                            <DateRangeRounded />
+                        </IconButton>
+                    </>
+                ) : (
+                    ''
+                )}
+            </Settings>
         </ListDisplayStyled>
     )
 }

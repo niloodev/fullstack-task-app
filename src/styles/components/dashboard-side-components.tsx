@@ -231,16 +231,12 @@ const SideBarStyled = styled(motion.div)`
 export default function SideBar() {
     // Get user data from global state.
     const userData = useSelector(state => state.user)
-
     // Anchor for Material UI Menu component.
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
     // Search string.
     const [search, setSearch] = useState('')
-
     // For mobile toggle bar.
     const [toggle, setToggle] = useState(false)
-
     // Redux hook.
     const dispatch = useDispatch()
     const tasksList: any = useSelector(state => state.user.tasksList)

@@ -39,13 +39,10 @@ const Login = () => {
     // State of input values and its errors state.
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
-
     const [passError, setPassError] = useState<string | undefined>()
     const [emailError, setEmailError] = useState<string | undefined>()
-
     // Get Redux dispatch.
     const dispatch = useDispatch()
-
     // Auth state from application global state.
     const isLoading = useSelector(state => state.auth.isLoading)
 

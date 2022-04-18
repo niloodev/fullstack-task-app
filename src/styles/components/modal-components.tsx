@@ -85,19 +85,15 @@ const modals = {
     add_tasksList: () => {
         // AnchorEl
         const [anchorEl, setAnchorEl] = useState<null | HTMLElement>()
-
         // Form states.
         const [listName, setListName] = useState('')
         const [listNameError, setListNameError] = useState('')
         const [color, setColor] = useState<Color>('#810')
         const [icon, setIcon] = useState(iconPalette[0])
-
         // Get dispatch
         const dispatch = useDispatch()
-
         // Get the current icon.
         const SelectedIcon = Icons[icon as keyof typeof Icons]
-
         // Confirm function.
         function confirmAdd(listName: string, color: string, icon: string) {
             if (listName.length < 3) setListNameError('Min. of 3 characters')
@@ -199,7 +195,6 @@ const modals = {
         const tasksListId = useSelector(
             state => state.interface.current.tasksListId
         )
-
         // Form states.
         const [taskName, setTaskName] = useState('')
         const [taskNameError, setTaskNameError] = useState('')
@@ -212,10 +207,8 @@ const modals = {
                 : ''
         )
         const [date, setDate] = useState<string>(moment().toISOString())
-
         // Get dispatch
         const dispatch = useDispatch()
-
         // Confirm function.
         function confirmAdd(taskName: string, taskList: string, date: string) {
             if (taskName.length < 3) setTaskNameError('Min. of 3 characters')
@@ -234,7 +227,6 @@ const modals = {
                 dispatch(closeModal())
             }
         }
-
         // Get icon from TaskList
         const Icon =
             list != '' && tasksList != null
@@ -344,7 +336,6 @@ export default function ApplicationModals() {
     // Get Redux state and dispatch.
     const { open, type } = useSelector(state => state.interface.modal)
     const dispatch = useDispatch()
-
     // If clicks in the background, close modal.
     useEffect(() => {
         const listener = (event: MouseEvent | TouchEvent) => {

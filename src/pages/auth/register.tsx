@@ -35,14 +35,11 @@ const Register = () => {
     const [user, setUser] = useState('')
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
-
     const [userError, setUserError] = useState<string | undefined>()
     const [passError, setPassError] = useState<string | undefined>()
     const [emailError, setEmailError] = useState<string | undefined>()
-
     // Get auth state.
     const isLoading = useSelector(state => state.auth.isLoading)
-
     // Get dispatch.
     const dispatch = useDispatch()
 
