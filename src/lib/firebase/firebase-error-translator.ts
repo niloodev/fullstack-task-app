@@ -6,8 +6,7 @@
 const firebaseErrors = {
     'auth/claims-too-large':
         'The claims payload provided to setCustomUserClaims() exceeds the maximum allowed size of 1000 bytes.',
-    'auth/email-already-exists':
-        'The provided email is already in use by an existing user. Each user must have a unique email.',
+    'auth/email-already-in-use': 'The provided e-mail is already in use.',
     'auth/id-token-expired': 'The provided Firebase ID token is expired.',
     'auth/id-token-revoked': 'The Firebase ID token has been revoked.',
     'auth/insufficient-permission':
@@ -108,7 +107,6 @@ const firebaseErrors = {
     'auth/wrong-password': 'The provided password is incorrect.',
     'auth/popup-closed-by-user': 'Pop-up was closed by the user.',
     'auth/too-many-requests': 'Too many attempts, try again later.',
-    else: 'Server error.',
 }
 
 export default firebaseErrors
