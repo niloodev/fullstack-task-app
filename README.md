@@ -1,7 +1,7 @@
 
 <h1 align="center">
   <br>
-    <a href="https://codeleap.co.uk/"> <img src="./taskapp-banner.svg" alt="TaskApp" width="80%"></a>
+    <a href="https://codeleap.co.uk/"> <img src="./taskapp-banner.svg" alt="TaskApp" width="100%"></a>
   <br>
     SIMPLE TASK APP
   <br>
