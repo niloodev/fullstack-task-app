@@ -564,6 +564,7 @@ export default function ApplicationModals() {
     // Get Redux state and dispatch.
     const { open, type } = useSelector(state => state.interface.modal)
     const dispatch = useDispatch()
+
     // If clicks in the background, close modal.
     useEffect(() => {
         const listener = (event: MouseEvent | TouchEvent) => {

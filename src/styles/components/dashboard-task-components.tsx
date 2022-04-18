@@ -198,6 +198,8 @@ export default function TaskList() {
     return (
         <TaskListWrapper layoutScroll>
             <TaskListDiv>
+                {/* 🐸: Here we will filter the tasks by: list, day.
+                And sort it by: time order and if its checked or not (checked first!). */}
                 {tasks != null
                     ? Object.keys(tasks)
                           .filter(key => {
@@ -242,6 +244,7 @@ export default function TaskList() {
                               />
                           ))
                     : ''}
+                {/* Add task button */}
                 <motion.div layout>
                     <ListItemButton
                         key="addtask_btn"
