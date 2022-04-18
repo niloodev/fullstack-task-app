@@ -24,7 +24,7 @@ const validateParams = {
     // Password have to contain a minimum of 6 characters.
     _password: {
         length: {
-            minimum: 3,
+            minimum: 6,
             message: 'Min of 6 characters.',
         },
     },
