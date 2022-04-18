@@ -249,6 +249,58 @@ export function addTasksList(payload: FilterTasksList) {
     }
 }
 
+export function editTasksList(payload: {
+    key: string
+    title?: string
+    color?: string
+    icon?: string
+}) {
+    return async (dispatch: Dispatch, getState: () => InitialStateType) => {
+        // Check if user is authenticated.
+        if (
+            getState().auth.authUser == null ||
+            getState().auth.authUser == 'waiting'
+        )
+            return
+
+        // Get userId from Redux.
+        const userUid = getState().auth.authUser['uid']
+
+        // Updates the task list.
+        await update(
+            ref(dataObj, 'user/' + userUid + '/tasksList/' + payload.key),
+            {
+                ...payload,
+            }
+        )
+    }
+}
+
+export function deleteTasksList(payload: string) {
+    return async (dispatch: Dispatch, getState: () => InitialStateType) => {
+        // Check if user is authenticated.
+        if (
+            getState().auth.authUser == null ||
+            getState().auth.authUser == 'waiting'
+        )
+            return
+
+        // Get userId from Redux.
+        const userUid = getState().auth.authUser['uid']
+
+        // Removes task list.
+        remove(ref(dataObj, 'user/' + userUid + '/tasksList/' + payload))
+
+        // Removes all tasks associated to this task list.
+        const tasks = getState().user.tasks
+        if (tasks != null)
+            Object.keys(tasks).map(key => {
+                if (tasks[key].taskList == payload)
+                    remove(ref(dataObj, 'user/' + userUid + '/tasks/' + key))
+            })
+    }
+}
+
 export function addTasks(payload: FilterTasks) {
     return async (dispatch: Dispatch, getState: () => InitialStateType) => {
         // Check if user is authenticated.

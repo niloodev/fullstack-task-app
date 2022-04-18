@@ -4,13 +4,20 @@
 // This is just a way to make declarative modals with Redux work.
 
 // React import.
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useLayoutEffect, useState } from 'react'
 
 // Get Redux hooks.
 import { useSelector, useDispatch } from 'react-redux'
 
 // Get application actions.
-import { addTasksList, addTasks } from '../../lib/redux/actions/action'
+import {
+    addTasksList,
+    editTasksList,
+    deleteTasksList,
+    addTasks,
+    selectTasksList,
+    selectDate,
+} from '../../lib/redux/actions/action'
 
 // Get application actions.
 import { closeModal } from '../../lib/redux/actions/action'
@@ -20,7 +27,7 @@ import { SliderPicker, Color } from 'react-color'
 
 // Import Moment and MUI Time Picker.
 import moment from 'moment'
-import { MobileDateTimePicker } from '@mui/x-date-pickers'
+import { MobileDateTimePicker, StaticDatePicker } from '@mui/x-date-pickers'
 
 // Import Styled Components, Material UI and Framer Motion for stylization.
 import styled from 'styled-components'
@@ -68,6 +75,7 @@ const iconPalette = [
 
 // Creation of the modals.
 const ModalBox = styled(motion.div)`
+    position: relative;
     padding: 15px;
 
     background-color: var(--color-secondary);
@@ -77,6 +85,7 @@ const ModalBox = styled(motion.div)`
 
     display: flex;
     flex-flow: column;
+    overflow-x: auto;
 
     flex: 1;
     max-width: 350px;
@@ -140,7 +149,7 @@ const modals = {
                         label="List name"
                         errorLog={listNameError}
                         error={listNameError != ''}
-                        inputProps={{ maxLength: 20 }}
+                        inputProps={{ maxLength: 15 }}
                         placeholder="My list name"
                         value={listName}
                         onChange={e => setListName(e.target.value)}
@@ -186,6 +195,195 @@ const modals = {
                         )
                     })}
                 </Menu>
+            </ModalBox>
+        )
+    },
+    edit_tasksList: () => {
+        // Get list info
+        const tasksListId = useSelector(
+            state => state.interface.current.tasksListId
+        )
+        const tasksList = useSelector(state => state.user.tasksList)
+        // Get dispatch
+        const dispatch = useDispatch()
+        // AnchorEl
+        const [anchorEl, setAnchorEl] = useState<null | HTMLElement>()
+        // Form states.
+        const [listName, setListName] = useState('')
+        const [listNameError, setListNameError] = useState('')
+        const [color, setColor] = useState<Color>('#810')
+        const [icon, setIcon] = useState(iconPalette[0])
+        // Get the current icon.
+        const SelectedIcon = Icons[icon as keyof typeof Icons]
+        // Confirm function.
+        function confirmEdit(listName: string, color: string, icon: string) {
+            if (listName.length < 3) setListNameError('Min. of 3 characters')
+            if (!tasksListId) setListNameError('Id error.')
+            else {
+                setListNameError('')
+                dispatch(
+                    editTasksList({
+                        key: tasksListId,
+                        color: color,
+                        title: listName,
+                        icon,
+                    })
+                )
+                dispatch(closeModal())
+            }
+        }
+
+        // 🐸: Before rendering, check if tasksList and tasksListId are in the right spot, and then defines the
+        // initial values.
+        useLayoutEffect(() => {
+            if (
+                !Object.keys(tasksList != null ? tasksList : {}).includes(
+                    tasksListId
+                )
+            )
+                dispatch(closeModal())
+            else {
+                setListName(
+                    tasksList != null ? tasksList[tasksListId].title : ''
+                )
+                setColor(tasksList != null ? tasksList[tasksListId].color : '')
+                setIcon(tasksList != null ? tasksList[tasksListId].icon : '')
+            }
+        }, [])
+
+        return (
+            // Main box
+            <ModalBox
+                key="edit_tasksList"
+                initial={{ opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.4, opacity: 0 }}
+            >
+                {/* Simple input wrapper. (Makes IconButton and the TextField aligned in a row) */}
+                <Box
+                    sx={{
+                        marginBottom: '15px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                    }}
+                >
+                    <IconButton
+                        sx={{ maxHeight: '40px' }}
+                        onClick={e => setAnchorEl(e.currentTarget)}
+                    >
+                        <SelectedIcon sx={{ color: color.toString() }} />
+                    </IconButton>
+                    <AuthInput
+                        divProps={{ style: { width: '100%' } }}
+                        color="primary"
+                        label="List name"
+                        errorLog={listNameError}
+                        error={listNameError != ''}
+                        inputProps={{ maxLength: 15 }}
+                        placeholder="My list name"
+                        value={listName}
+                        onChange={e => setListName(e.target.value)}
+                        onKeyDown={e => {
+                            if (e.key == 'Enter')
+                                confirmEdit(listName, color.toString(), icon)
+                        }}
+                    />
+                </Box>
+                {/* One of color pickers of React Color */}
+                <SliderPicker
+                    color={color}
+                    onChange={color => setColor(color.hex)}
+                />
+                {/* Add button */}
+                <Button
+                    onClick={() =>
+                        confirmEdit(listName, color.toString(), icon)
+                    }
+                    sx={{
+                        marginTop: '15px',
+                        color: color.toString(),
+                    }}
+                >
+                    Edit
+                </Button>
+                {/* Menu from IconButton */}
+                <Menu
+                    anchorEl={anchorEl}
+                    onClose={() => setAnchorEl(null)}
+                    open={anchorEl != null}
+                >
+                    {iconPalette.map(val => {
+                        const Icon = Icons[val as keyof typeof Icons]
+                        return (
+                            <MenuItem
+                                key={val}
+                                onClick={() => {
+                                    setIcon(val)
+                                    setAnchorEl(null)
+                                }}
+                            >
+                                <Icon sx={{ color: color.toString() }} />
+                            </MenuItem>
+                        )
+                    })}
+                </Menu>
+            </ModalBox>
+        )
+    },
+    remove_taskslist: () => {
+        // Get list id and tasksLists.
+        const tasksList = useSelector(state => state.user.tasksList)
+        const tasksListId = useSelector(
+            state => state.interface.current.tasksListId
+        )
+        // Get dispatch.
+        const dispatch = useDispatch()
+
+        // Check if tasksListId exists on current lists.
+        if (
+            !Object.keys(tasksList != null ? tasksList : {}).includes(
+                tasksListId
+            )
+        ) {
+            dispatch(closeModal())
+            return <></>
+        }
+
+        return (
+            <ModalBox>
+                <Box sx={{ display: 'flex', flexFlow: 'column', gap: '10px' }}>
+                    <span>
+                        Are you sure you want to delete this list? (This will
+                        delete all tasks associated to it)
+                    </span>
+                    <Box
+                        style={{
+                            display: 'flex',
+                            flexFlow: 'row',
+                        }}
+                    >
+                        <Button
+                            color="error"
+                            sx={{ flex: 1 }}
+                            onClick={() => {
+                                dispatch(selectTasksList('tasks'))
+                                dispatch(deleteTasksList(tasksListId))
+                                dispatch(closeModal())
+                            }}
+                        >
+                            Delete
+                        </Button>
+                        <Button
+                            sx={{ flex: 1 }}
+                            onClick={() => {
+                                dispatch(closeModal())
+                            }}
+                        >
+                            Cancel
+                        </Button>
+                    </Box>
+                </Box>
             </ModalBox>
         )
     },
@@ -303,6 +501,36 @@ const modals = {
                 >
                     Add
                 </Button>
+            </ModalBox>
+        )
+    },
+    select_date: () => {
+        // Get info from Redux and dispatch function.
+        const dateFilter = useSelector(
+            state => state.interface.current.dateFilter
+        )
+        const dispatch = useDispatch()
+
+        return (
+            <ModalBox
+                key="select_date"
+                style={{ gap: '5px' }}
+                initial={{ opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.4, opacity: 0 }}
+            >
+                <Button onClick={() => dispatch(selectDate(''))}>Clear</Button>
+                <motion.div style={{ width: '100%', overflowX: 'auto' }}>
+                    <StaticDatePicker
+                        orientation="portrait"
+                        open={true}
+                        renderInput={props => <TextField {...props} />}
+                        value={dateFilter}
+                        onChange={e =>
+                            dispatch(selectDate(moment(e).toISOString()))
+                        }
+                    />
+                </motion.div>
             </ModalBox>
         )
     },

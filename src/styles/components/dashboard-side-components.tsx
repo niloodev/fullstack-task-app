@@ -32,6 +32,7 @@ import {
     MenuItem,
     Avatar,
     SvgIconProps,
+    Tooltip,
     Divider,
     IconButton,
     TextField,
@@ -275,16 +276,18 @@ export default function SideBar() {
                             padding: '10px',
                         }}
                     >
-                        <IconButton
-                            size="small"
-                            onClick={(
-                                event: React.MouseEvent<HTMLButtonElement>
-                            ) => {
-                                setAnchorEl(event.currentTarget)
-                            }}
-                        >
-                            <Avatar />
-                        </IconButton>
+                        <Tooltip title="User options.">
+                            <IconButton
+                                size="small"
+                                onClick={(
+                                    event: React.MouseEvent<HTMLButtonElement>
+                                ) => {
+                                    setAnchorEl(event.currentTarget)
+                                }}
+                            >
+                                <Avatar />
+                            </IconButton>
+                        </Tooltip>
                         <Menu
                             open={Boolean(anchorEl)}
                             anchorEl={anchorEl}

@@ -225,6 +225,12 @@ export default function TaskList() {
                                   moment(tasks[a].date).unix() -
                                   moment(tasks[b].date).unix()
                           )
+                          .sort((a, b) => {
+                              const a_ = tasks[a].checked ? 0 : 1
+                              const b_ = tasks[b].checked ? 0 : 1
+                              console.log(a_ - b_)
+                              return a_ - b_
+                          })
                           .map(key => (
                               <TaskModel
                                   key={key}

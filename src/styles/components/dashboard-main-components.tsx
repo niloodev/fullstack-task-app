@@ -6,16 +6,15 @@ import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
 // Material UI import.
-import { Button, IconButton, TextField, Modal } from '@mui/material'
+import { IconButton, Menu, ListItemButton, Tooltip } from '@mui/material'
 import { DateRangeRounded, MoreHorizRounded } from '@mui/icons-material'
 
 // Moment import and MUI time picker.
 import moment from 'moment'
-import { StaticDatePicker } from '@mui/x-date-pickers'
 
 // Redux hooks and actions.
 import { useSelector, useDispatch } from 'react-redux'
-import { selectDate } from '../../lib/redux/actions/action'
+import { openModal } from '../../lib/redux/actions/action'
 
 // Dashboard main is the parent component to all others in dashboard.
 export const DashboardMain = styled(motion.main)`
@@ -53,6 +52,7 @@ const ListDisplayStyled = styled(motion.div)`
     border-radius: 5px;
     grid-area: display;
     background-image: var(--gradient-primary);
+    overflow: hidden;
 
     display: flex;
     align-items: center;
@@ -63,8 +63,12 @@ const ListDisplayStyled = styled(motion.div)`
     }
 `
 const ListName = styled(motion.h1)`
-    font-size: 45px;
+    font-size: 3vw;
     color: var(--color-secondary);
+
+    @media (max-width: 800px) {
+        font-size: 8vw;
+    }
 `
 const Date = styled(motion.span)`
     position: absolute;
@@ -95,8 +99,8 @@ export const ListDisplay = () => {
     const tasksListMap = useSelector(state => state.user.tasksList)
     // Get dispatch.
     const dispatch = useDispatch()
-    // State of simple date modal.
-    const [open, setOpen] = useState(false)
+    // Menu state.
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     // Get interface payload.
     const { tasksListId, dateFilter } = useSelector(
         state => state.interface.current
@@ -111,10 +115,11 @@ export const ListDisplay = () => {
                     ? 'Favorite'
                     : tasksListId == 'tasks'
                     ? 'Tasks'
-                    : tasksListMap != null
+                    : tasksListMap != null &&
+                      tasksListMap[tasksListId] != undefined
                     ? tasksListMap[tasksListId as keyof typeof tasksListMap]
                           .title
-                    : 'undefined'}
+                    : 'Undefined'}
             </ListName>
             <Date>
                 {dateFilter != ''
@@ -126,60 +131,60 @@ export const ListDisplay = () => {
                 {tasksListId != 'today' &&
                 tasksListId != 'favorite' &&
                 tasksListId != 'tasks' ? (
-                    <IconButton color="secondary">
-                        <MoreHorizRounded />
-                    </IconButton>
+                    <motion.div layout>
+                        <Tooltip title="List options.">
+                            <IconButton
+                                color="secondary"
+                                onClick={e => setAnchorEl(e.currentTarget)}
+                            >
+                                <MoreHorizRounded />
+                            </IconButton>
+                        </Tooltip>
+                    </motion.div>
                 ) : (
                     ''
                 )}
 
                 {tasksListId != 'today' ? (
-                    <>
-                        <Modal
-                            open={open}
-                            onClose={() => setOpen(false)}
-                            sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                            }}
-                        >
-                            <motion.div style={{ position: 'relative' }}>
-                                <StaticDatePicker
-                                    renderInput={props => (
-                                        <TextField {...props} />
-                                    )}
-                                    value={dateFilter}
-                                    onChange={e =>
-                                        dispatch(
-                                            selectDate(moment(e).toISOString())
-                                        )
-                                    }
-                                />
-                                <Button
-                                    sx={{
-                                        width: '100%',
-                                        position: 'absolute',
-                                        bottom: '0px',
-                                    }}
-                                    onClick={() => dispatch(selectDate(''))}
-                                >
-                                    Clear
-                                </Button>
-                            </motion.div>
-                        </Modal>
-                        <IconButton
-                            color="secondary"
-                            onClick={() =>
-                                open ? setOpen(false) : setOpen(true)
-                            }
-                        >
-                            <DateRangeRounded />
-                        </IconButton>
-                    </>
+                    <motion.div layout>
+                        <Tooltip title="Select a custom date.">
+                            <IconButton
+                                color="secondary"
+                                onClick={() =>
+                                    dispatch(openModal('select_date'))
+                                }
+                            >
+                                <DateRangeRounded />
+                            </IconButton>
+                        </Tooltip>
+                    </motion.div>
                 ) : (
                     ''
                 )}
+                <Menu
+                    open={Boolean(anchorEl)}
+                    anchorEl={anchorEl}
+                    onClose={() => setAnchorEl(null)}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                >
+                    <ListItemButton
+                        onClick={() => {
+                            dispatch(openModal('edit_tasksList'))
+                            setAnchorEl(null)
+                        }}
+                    >
+                        Edit
+                    </ListItemButton>
+                    <ListItemButton
+                        sx={{ color: 'error.main' }}
+                        onClick={() => {
+                            dispatch(openModal('remove_taskslist'))
+                            setAnchorEl(null)
+                        }}
+                    >
+                        Delete
+                    </ListItemButton>
+                </Menu>
             </Settings>
         </ListDisplayStyled>
     )
