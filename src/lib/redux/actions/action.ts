@@ -116,7 +116,13 @@ export function signInEmailAndPassword(email: string, password: string) {
             dispatch(
                 callSnackbar({
                     message:
-                        firebaseErrors[err.code as keyof typeof firebaseErrors],
+                        firebaseErrors[
+                            err.code as keyof typeof firebaseErrors
+                        ] == undefined
+                            ? err.code
+                            : firebaseErrors[
+                                  err.code as keyof typeof firebaseErrors
+                              ],
                     variant: 'error',
                 })
             )
@@ -149,7 +155,13 @@ export function createUserWithEmailAndPassword(
             dispatch(
                 callSnackbar({
                     message:
-                        firebaseErrors[err.code as keyof typeof firebaseErrors],
+                        firebaseErrors[
+                            err.code as keyof typeof firebaseErrors
+                        ] == undefined
+                            ? err.code
+                            : firebaseErrors[
+                                  err.code as keyof typeof firebaseErrors
+                              ],
                     variant: 'error',
                 })
             )
@@ -185,7 +197,13 @@ export function signInWithGithub() {
             dispatch(
                 callSnackbar({
                     message:
-                        firebaseErrors[err.code as keyof typeof firebaseErrors],
+                        firebaseErrors[
+                            err.code as keyof typeof firebaseErrors
+                        ] == undefined
+                            ? err.code
+                            : firebaseErrors[
+                                  err.code as keyof typeof firebaseErrors
+                              ],
                     variant: 'error',
                 })
             )
