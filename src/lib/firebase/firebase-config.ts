@@ -7,7 +7,7 @@ import { getDatabase, Database } from 'firebase/database'
 import type { Auth } from 'firebase/auth'
 
 // Sets config.
-console.log(JSON.parse(process.env['FIREBASE_CONFIG'] || '{}'))
+console.log(process.env)
 const firebaseConfig = JSON.parse(process.env['FIREBASE_CONFIG'] || '{}')
 
 // Export all new instances to application.
