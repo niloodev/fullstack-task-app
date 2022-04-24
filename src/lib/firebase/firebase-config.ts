@@ -7,8 +7,9 @@ import { getDatabase, Database } from 'firebase/database'
 import type { Auth } from 'firebase/auth'
 
 // Sets config.
-console.log(process.env)
-const firebaseConfig = JSON.parse(process.env['FIREBASE_CONFIG'] || '{}')
+const firebaseConfig = JSON.parse(
+    process.env['NEXT_PUBLIC_FIREBASE_CONFIG'] || '{}'
+)
 
 // Export all new instances to application.
 export const GithubProvider = new GithubAuthProvider()
@@ -17,5 +18,4 @@ export const initializedApp: FirebaseApp = initializeApp(firebaseConfig)
 export const initializedDatabase: Database = getDatabase(initializedApp)
 export const initializedAuth: Auth = getAuth(initializedApp)
 
-console.log(process.env['RECAPTCHA_KEY'] || '')
-export const reCaptchaKey = process.env['RECAPTCHA_KEY'] || ''
+export const reCaptchaKey = process.env['NEXT_PUBLIC_RECAPTCHA_KEY'] || ''
